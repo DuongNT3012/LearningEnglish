@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.projectse.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <activity
+        android:id="@+id/HocTuVung"
+        android:name="com.example.projectse.hoctuvung.HocTuVungActivity"
+        android:label="Học từ vựng"
+        tools:layout="@layout/activity_hoctuvung" />
+    <activity
+        android:id="@+id/DSTuVung"
+        android:name="com.example.projectse.hoctuvung.DSTuVungActivity"
+        android:label="Danh sách từ vựng"
+        tools:layout="@layout/activity_ds_tuvung" />
+
+    <activity
+        android:id="@+id/SapXepCau"
+        android:name="com.example.projectse.sapxepcau.SapXepCauActivity"
+        android:label="Word Matters"
+        tools:layout="@layout/activity_sapxepcau" />
+    <activity
+        android:id="@+id/ThongTinTaiKhoan"
+        android:name="com.example.projectse.taikhoan.ThongTinTaikhoanActivity"
+        android:label="Thong Tin Tai Khhoan"
+        tools:layout="@layout/activity_thong_tin_taikhoan" />
+    <activity
+        android:id="@+id/TracNghiem"
+        android:name="com.example.projectse.tracnghiem.TracNghiemActivity"
+        android:label="Trac Nghiem"
+        tools:layout="@layout/activity_trac_nghiem"></activity>
+    <activity
+        android:id="@+id/DienKhuyet"
+        android:name="com.example.projectse.dienkhuyet.DienKhuyetActivity"
+        android:label="Trac Nghiem"
+        tools:layout="@layout/activity_dien_khuyet"></activity>
+    <activity
+        android:id="@+id/LuyenNghe"
+        android:name="com.example.projectse.luyennghe.LuyenNgheActivity"
+        android:label="Luyen Nghe"
+        tools:layout="@layout/activity_luyen_nghe"></activity>
+
+    <fragment
+        android:id="@+id/logout"
+        android:name="com.example.projectse.ui.home.LogoutFragment"
+        tools:layout="@layout/fragment_logout"></fragment>
+</navigation>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.projectse">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ProjectSE">
+        <activity android:name=".taikhoan.RankingActivity" />
+        <activity android:name=".dienkhuyet.FinishDKActivity" />
+        <activity android:name=".dienkhuyet.FillBlanksActivity" />
+        <activity android:name=".dienkhuyet.DienKhuyetActivity" />
+        <activity android:name=".taikhoan.ForgotPasswordActivity" />
+        <activity android:name=".sapxepcau.FinishSXCActivity" />
+        <activity android:name=".tracnghiem.FinishQuizActivity" />
+        <activity android:name=".tracnghiem.QuizActivity" />
+        <activity android:name=".tracnghiem.TracNghiemActivity" />
+        <activity android:name=".luyennghe.FinishQuizLSActivity" />
+        <activity android:name=".luyennghe.LuyenNgheActivity" />
+        <activity android:name=".taikhoan.ThongTinTaikhoanActivity" />
+        <activity android:name=".sapxepcau.ArrangeSentencesActivity" />
+        <activity android:name=".sapxepcau.SapXepCauActivity" />
+        <activity android:name=".hoctuvung.FinishHTVActivity" />
+        <activity android:name=".hoctuvung.WordMattersActivity" />
+        <activity android:name=".hoctuvung.DSTuVungActivity" />
+        <activity android:name=".hoctuvung.HocTuVungActivity" />
+        <activity android:name=".luyennghe.ListeningActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.ProjectSE.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".taikhoan.Signup" />
+        <activity android:name=".taikhoan.LoginActivity">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+    </application>
+
+</manifest>

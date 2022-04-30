@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_main"
+            android:title="@string/menu_home" />
+        <item
+            android:icon="@drawable/ic_setting"
+            android:title="Cài đặt"></item>
+
+    </group>
+    <item android:title="Học tập">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/HocTuVung"
+                    android:icon="@drawable/ic_vocabulary"
+                    android:title="Học từ vựng" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Bài kiểm tra">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/TracNghiem"
+                    android:icon="@drawable/ic_spacefill"
+                    android:title="Trắc Nghiệm"></item>
+                <item
+                    android:id="@+id/SapXepCau"
+                    android:icon="@drawable/ic_order"
+                    android:title="Sắp xếp câu"></item>
+                <item
+                    android:id="@+id/LuyenNghe"
+                    android:icon="@drawable/ic_hearing"
+                    android:title="Nghe"></item>
+                <item
+                    android:icon="@drawable/ic_allsubject"
+                    android:title="Tổng hợp"></item>
+            </group>
+        </menu>
+    </item>
+    <item android:title="Tài khoản">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/ThongTinTaiKhoan"
+                    android:icon="@drawable/ic_person"
+                    android:title="Thông tin tài khoản"></item>
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Đăng xuất"></item>
+            </group>
+        </menu>
+    </item>
+</menu>

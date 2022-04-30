@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "286154081410",
+    "firebase_url": "https://language-learning-apps-f2303-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "language-learning-apps-f2303",
+    "storage_bucket": "language-learning-apps-f2303.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286154081410:android:1dbe2d3dfe35d6c094e09b",
+        "android_client_info": {
+          "package_name": "com.example.projectse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286154081410-kn3r6h3dml7d6etth3o544rc2rduqn3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2cs1ZdaAJd2gnZEE3eHzwFC0aNF4mVTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286154081410-kn3r6h3dml7d6etth3o544rc2rduqn3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
