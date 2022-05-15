@@ -131,6 +131,7 @@ public class FillBlanksActivity extends AppCompatActivity {
             intent.putExtra("questiontrueDK", questiontrue);
             intent.putExtra("qcountDK", pos);
             startActivity(intent);
+            finish();
         }
         for (int i = pos; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);

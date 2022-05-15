@@ -1,36 +1,55 @@
 package com.example.projectse.hoctuvung;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectse.R;
+import com.example.projectse.ui.BottomSheetMic;
+import com.example.projectse.ui.IonClickBtsMic;
 import com.example.projectse.ui.home.Database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class DSTuVungActivity extends AppCompatActivity {
 
-    final  String DATABASE_NAME = "HocNgonNgu.db";
+    final String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     ImageView imgback;
-
     GridView dstuvungs;
     Button Ontap;
     ArrayList<TuVung> DStuvung;
     ArrayList<String> listtu;
     DSTuVungAdapter adapter;
-
+    private TextToSpeech tts;
     int idbo;
+    StringBuilder text;
+    BottomSheetMic bottomSheetMic;
+    SpeechRecognizer speechRecognizer;
+    Intent speechIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +59,7 @@ public class DSTuVungActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ds_tuvung);
 
         Intent intent = getIntent();
-        idbo = intent.getIntExtra("idbo",0);
+        idbo = intent.getIntExtra("idbo", 0);
 
         dstuvungs = (GridView) findViewById(R.id.lgvTuVung);
         Ontap = (Button) findViewById(R.id.btnOnTap);
@@ -48,17 +67,63 @@ public class DSTuVungActivity extends AppCompatActivity {
         DStuvung = new ArrayList<>();
         listtu = new ArrayList<>();
         AddArrayTV();
-        adapter = new DSTuVungAdapter(DSTuVungActivity.this,R.layout.row_dstuvung, DStuvung);
+        //speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(
+                this,
+                new ComponentName(
+                        "com.google.android.tts",
+                        "com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService"
+                )
+        );
+        speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        adapter = new DSTuVungAdapter(DSTuVungActivity.this, R.layout.row_dstuvung, DStuvung, new IonClickItemVocab() {
+            @Override
+            public void onClickSpeaker(TuVung tuVung) {
+                tts = new TextToSpeech(DSTuVungActivity.this, new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status == TextToSpeech.SUCCESS) {
+                            Toast.makeText(DSTuVungActivity.this, tuVung.getDapan(), Toast.LENGTH_SHORT).show();
+                            textToSpeed(tuVung.getDapan());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onClickMic(TuVung tuVung) {
+                //speedToText(tuVung);
+                bottomSheetMic = new BottomSheetMic(DSTuVungActivity.this, new IonClickBtsMic() {
+                    @Override
+                    public void onClickBtsMic() {
+                        speechIntent.putExtra(
+                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                        );
+                        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
+                        speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+                        speechRecognizer.startListening(speechIntent);
+                        recognitionListener(tuVung);
+                    }
+                });
+                bottomSheetMic.show(getSupportFragmentManager(), "BottomSheetMic");
+                speechIntent.putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                );
+                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
+                speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+                speechRecognizer.startListening(speechIntent);
+                recognitionListener(tuVung);
+            }
+        });
         dstuvungs.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(DSTuVungActivity.this,
-                        HocTuVungActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -66,22 +131,86 @@ public class DSTuVungActivity extends AppCompatActivity {
         Ontap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent ontap = new Intent(DSTuVungActivity.this, WordMattersActivity.class);
                 ontap.putExtra("idbo", idbo);
                 startActivity(ontap);
             }
         });
-
-
     }
 
-    private void AddArrayTV(){
-        database = Database.initDatabase(DSTuVungActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM TuVung WHERE ID_Bo = ?",new String[]{String.valueOf(idbo)});
+    private void recognitionListener(TuVung tuVung) {
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+                if (BottomSheetMic.tv_text.getText().toString().toLowerCase().equals(tuVung.getDapan().toLowerCase())) {
+                    Toast.makeText(DSTuVungActivity.this, "Phát âm chuẩn", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DSTuVungActivity.this, "Phát âm sai", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(int i) {
+
+            }
+
+            @Override
+            public void onResults(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+                ArrayList<String> arrayList =
+                        bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                BottomSheetMic.tv_text.setText(arrayList.get(0));
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+
+            }
+        });
+    }
+
+    private void textToSpeed(String s) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+            tts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
+        } else {
+            HashMap<String, String> param = new HashMap<>();
+            param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
+            tts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
+        }
+    }
+
+    private void AddArrayTV() {
+        /*database = Database.initDatabase(DSTuVungActivity.this, DATABASE_NAME);
+        Cursor cursor = database.rawQuery("SELECT * FROM TuVung WHERE ID_Bo = ?", new String[]{String.valueOf(idbo)});
         DStuvung.clear();
 
-        for (int i = 0; i < cursor.getCount(); i++){
+        for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
             int idtu = cursor.getInt(0);
             int idbo = cursor.getInt(1);
@@ -91,7 +220,30 @@ public class DSTuVungActivity extends AppCompatActivity {
             String audio = cursor.getString(5);
             byte[] anh = cursor.getBlob(6);
 
-            DStuvung.add(new TuVung(idtu,idbo,dapan,dichnghia,loaitu,audio,anh));
+            DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
+        }*/
+
+        DStuvung.clear();
+        switch (idbo){
+            case 1:
+                DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"customer","Khách hàng","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(3,idbo,"purchase","Mua","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(4,idbo,"item","Món hàng","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(5,idbo,"consultant","Tư vấn viên","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 2:
+                DStuvung.add(new TuVung(1,idbo,"resign","Từ chức","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"payroll","Lương","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 3:
+                DStuvung.add(new TuVung(1,idbo,"advise","Khuyên bảo","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"leadership","Lãnh đạo","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 4:
+                DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.ic_dollar));
+                break;
         }
     }
 }

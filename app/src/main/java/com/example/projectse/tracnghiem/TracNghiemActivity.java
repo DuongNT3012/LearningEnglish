@@ -72,15 +72,12 @@ public class TracNghiemActivity extends AppCompatActivity {
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(TracNghiemActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
     private void AddArrayBTN(){
-        database= Database.initDatabase(TracNghiemActivity.this,DATABASE_NAME);
+        /*database= Database.initDatabase(TracNghiemActivity.this,DATABASE_NAME);
         Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
         boHocTapArrayList.clear();
         for (int i = 0; i < cursor.getCount(); i++){
@@ -90,6 +87,11 @@ public class TracNghiemActivity extends AppCompatActivity {
             String tenbo = cursor.getString(2);
             boHocTapArrayList.add(new BoHocTap(idbo,stt,tenbo));
 
-        }
+        }*/
+        boHocTapArrayList.clear();
+        boHocTapArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
+        boHocTapArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
+        boHocTapArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
+        boHocTapArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
     }
 }

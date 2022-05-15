@@ -8,9 +8,9 @@
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="3dp"
         android:clickable="true"
         android:padding="3dp"
-        android:layout_marginBottom="3dp"
         app:cardCornerRadius="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,15 +30,37 @@
                 android:gravity="center"
                 android:src="@drawable/cloud"></ImageView>
 
-            <TextView
-                android:id="@+id/twTuVung"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Từ Vựng"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/twTuVung"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/img_speaker"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Từ Vựng"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/img_speaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/img_mic"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_campaign" />
+
+                <ImageView
+                    android:id="@+id/img_mic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_mic" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/twDichNghia"

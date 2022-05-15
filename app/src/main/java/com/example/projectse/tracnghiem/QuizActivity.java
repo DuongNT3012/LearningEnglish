@@ -85,10 +85,7 @@ public class QuizActivity extends AppCompatActivity {
         btnquit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(QuizActivity.this,
-                        TracNghiemActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -108,7 +105,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void AddArrayCTN() {
-        database = Database.initDatabase(QuizActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(QuizActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM TracNghiem WHERE ID_Bo = ?", new String[]{String.valueOf(idbo)});
         cauTracNghiems.clear();
 
@@ -124,6 +121,25 @@ public class QuizActivity extends AppCompatActivity {
             String True = cursor.getString(7);
 
             cauTracNghiems.add(new CauTracNghiem(idcau, idbo, noidung, A, B, C, D, True));
+        }*/
+
+        switch (idbo){
+            case 1:
+                cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
+                cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
+                break;
+            case 2:
+                cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
+                cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
+                break;
+            case 3:
+                cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
+                cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
+                break;
+            case 4:
+                cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
+                cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
+                break;
         }
     }
 

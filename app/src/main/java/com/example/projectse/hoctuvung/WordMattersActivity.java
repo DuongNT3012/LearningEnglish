@@ -98,8 +98,8 @@ public class WordMattersActivity extends AppCompatActivity {
         });
 
 
-        Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(0).getAnh(), 0, DStuvung.get(0).getAnh().length);
-        imgview.setImageBitmap(img);
+        /*Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(0).getAnh(), 0, DStuvung.get(0).getAnh().length);
+        imgview.setImageBitmap(img);*/
         imgview.startAnimation(smalltobig);
         textQuestion.setText("(" + DStuvung.get(0).getLoaitu() + ") - " + "(" + DStuvung.get(0).getDichnghia() + ")");
         tvWordCount.setText("Word: " + tu + "/" + DStuvung.size());
@@ -149,10 +149,6 @@ public class WordMattersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                Intent intent
-                        = new Intent(WordMattersActivity.this,
-                        HocTuVungActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -191,7 +187,7 @@ public class WordMattersActivity extends AppCompatActivity {
 
 
     private void AddArrayTV() {
-        database = Database.initDatabase(WordMattersActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(WordMattersActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM TuVung WHERE ID_Bo = ?", new String[]{String.valueOf(idbo)});
         DStuvung.clear();
 
@@ -206,6 +202,28 @@ public class WordMattersActivity extends AppCompatActivity {
             byte[] anh = cursor.getBlob(6);
 
             DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
+        }*/
+        DStuvung.clear();
+        switch (idbo){
+            case 1:
+                DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"customer","Khách hàng","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(3,idbo,"purchase","Mua","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(4,idbo,"item","Món hàng","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(5,idbo,"consultant","Tư vấn viên","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 2:
+                DStuvung.add(new TuVung(1,idbo,"resign","Từ chức","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"payroll","Lương","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 3:
+                DStuvung.add(new TuVung(1,idbo,"advise","Khuyên bảo","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"leadership","Lãnh đạo","Danh từ","", R.drawable.ic_dollar));
+                break;
+            case 4:
+                DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.ic_dollar));
+                break;
         }
     }
 
@@ -295,8 +313,8 @@ public class WordMattersActivity extends AppCompatActivity {
             } else {
                 if (tu > 0) doStop();
                 Toast.makeText(WordMattersActivity.this, "Chính xác!!(^.^)", Toast.LENGTH_SHORT).show();
-                Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(tu).getAnh(), 0, DStuvung.get(tu).getAnh().length);
-                imgview.setImageBitmap(img);
+                /*Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(tu).getAnh(), 0, DStuvung.get(tu).getAnh().length);
+                imgview.setImageBitmap(img);*/
                 imgview.startAnimation(smalltobig);
                 textQuestion.setText("(" + DStuvung.get(tu).getLoaitu() + ") - " + "(" + DStuvung.get(tu).getDichnghia() + ")");
                 textAnswer = DStuvung.get(tu).getDapan();

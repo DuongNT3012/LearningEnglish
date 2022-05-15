@@ -45,7 +45,7 @@
             </group>
         </menu>
     </item>
-    <item android:title="Tài khoản">
+    <!--<item android:title="Tài khoản">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -58,5 +58,5 @@
                     android:title="Đăng xuất"></item>
             </group>
         </menu>
-    </item>
+    </item>-->
 </menu>

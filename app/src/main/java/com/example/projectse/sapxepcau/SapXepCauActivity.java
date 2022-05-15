@@ -63,15 +63,12 @@ public class SapXepCauActivity extends AppCompatActivity {
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(SapXepCauActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
     private void AddArrayBTV(){
-        database = Database.initDatabase(SapXepCauActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(SapXepCauActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi",null);
         boTuVungs.clear();
 
@@ -81,7 +78,11 @@ public class SapXepCauActivity extends AppCompatActivity {
             int  stt = cursor.getInt(1);
             String tenbo = cursor.getString(2);
             boTuVungs.add(new BoHocTap(idbo,stt,tenbo));
-        }
-
+        }*/
+        boTuVungs.clear();
+        boTuVungs.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
+        boTuVungs.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
+        boTuVungs.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
+        boTuVungs.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
     }
 }

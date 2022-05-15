@@ -151,7 +151,7 @@ public class ListeningActivity extends AppCompatActivity {
     }
 
     private void AddArrayCLN() {
-        database = Database.initDatabase(ListeningActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(ListeningActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM LuyenNghe WHERE ID_Bo = ?", new String[]{String.valueOf(idbo)});
         cauLuyenNghes.clear();
 
@@ -168,6 +168,42 @@ public class ListeningActivity extends AppCompatActivity {
             String audio = cursor.getString(8);
 
             cauLuyenNghes.add(new CauLuyenNghe(idbai, idbo, A, B, C, D, True, hinh, audio));
+        }*/
+
+        cauLuyenNghes.clear();
+        switch (idbo){
+            case 1:
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                break;
+            case 2:
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                break;
+            case 3:
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                break;
+            case 4:
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                break;
         }
     }
 

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class HocTuVungActivity extends AppCompatActivity {
 
-    final  String DATABASE_NAME = "HocNgonNgu.db";
+    final String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     ImageView imgback;
 
@@ -45,7 +45,7 @@ public class HocTuVungActivity extends AppCompatActivity {
         imgback = findViewById(R.id.imgVBackHTV);
         boTuVungs = new ArrayList<>();
         AddArrayBTV();
-        adapter = new BoHocTapAdapter(HocTuVungActivity.this,R.layout.row_botuvung,boTuVungs);
+        adapter = new BoHocTapAdapter(HocTuVungActivity.this, R.layout.row_botuvung, boTuVungs);
         botuvungs.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -62,26 +62,27 @@ public class HocTuVungActivity extends AppCompatActivity {
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(HocTuVungActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
 
-    private void AddArrayBTV(){
-        database = Database.initDatabase(HocTuVungActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi",null);
+    private void AddArrayBTV() {
+        /*database = Database.initDatabase(HocTuVungActivity.this, DATABASE_NAME);
+        Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
         boTuVungs.clear();
 
-        for (int i = 0; i < cursor.getCount(); i++){
+        for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
             int idbo = cursor.getInt(0);
-            int  stt = cursor.getInt(1);
+            int stt = cursor.getInt(1);
             String tenbo = cursor.getString(2);
-            boTuVungs.add(new BoHocTap(idbo,stt,tenbo));
-        }
-
+            boTuVungs.add(new BoHocTap(idbo, stt, tenbo));
+        }*/
+        boTuVungs.clear();
+        boTuVungs.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
+        boTuVungs.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
+        boTuVungs.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
+        boTuVungs.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
     }
 }

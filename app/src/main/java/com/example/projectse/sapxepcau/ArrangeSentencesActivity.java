@@ -154,6 +154,37 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
 
             cauSapXeps.add(new CauSapXep(idcau, idbo, dapan, part1, part2, part3, part4));
         }
+
+        switch (idbo) {
+            case 1:
+                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
+                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
+                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
+                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
+                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
+                break;
+            case 2:
+                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
+                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
+                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
+                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
+                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
+                break;
+            case 3:
+                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
+                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
+                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
+                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
+                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
+                break;
+            case 4:
+                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
+                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
+                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
+                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
+                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
+                break;
+        }
     }
 
     private String[] shuffleArray(String[] ar) {

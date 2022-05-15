@@ -70,16 +70,13 @@ public class LuyenNgheActivity extends AppCompatActivity {
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(LuyenNgheActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
 
     private void AddArrayBTN() {
-        database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
         boCauHoiArrayList.clear();
         for (int i = 0; i < cursor.getCount(); i++) {
@@ -89,6 +86,11 @@ public class LuyenNgheActivity extends AppCompatActivity {
             String tenbo = cursor.getString(2);
             boCauHoiArrayList.add(new BoHocTap(idbo, stt, tenbo));
 
-        }
+        }*/
+        boCauHoiArrayList.clear();
+        boCauHoiArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
+        boCauHoiArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
+        boCauHoiArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
+        boCauHoiArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
     }
 }
