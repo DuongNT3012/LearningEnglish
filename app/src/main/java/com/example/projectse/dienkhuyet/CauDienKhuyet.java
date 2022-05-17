@@ -13,6 +13,10 @@ public class CauDienKhuyet implements Serializable {
         Dapan = dapan;
     }
 
+    public CauDienKhuyet() {
+
+    }
+
     public int getIdcau() {
         return idcau;
     }

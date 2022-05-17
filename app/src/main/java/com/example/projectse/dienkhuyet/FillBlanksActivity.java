@@ -23,6 +23,8 @@ import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
 
+import java.util.ArrayList;
+
 public class FillBlanksActivity extends AppCompatActivity {
 
     final String DATABASE_NAME = "HocNgonNgu.db";
@@ -38,6 +40,7 @@ public class FillBlanksActivity extends AppCompatActivity {
     int idbo;
 
     User user;
+    ArrayList<CauDienKhuyet> cauDienKhuyets = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +91,7 @@ public class FillBlanksActivity extends AppCompatActivity {
         btnQuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent
-                        = new Intent(FillBlanksActivity.this,
-                        DienKhuyetActivity.class);
+                Intent intent = new Intent(FillBlanksActivity.this, DienKhuyetActivity.class);
                 startActivity(intent);
             }
         });
@@ -116,8 +117,10 @@ public class FillBlanksActivity extends AppCompatActivity {
     public void shownextquestion(int pos) {
 
         database = Database.initDatabase(FillBlanksActivity.this, DATABASE_NAME);
-        String a = null;
         Cursor cursor = database.rawQuery("SELECT * FROM DienKhuyet WHERE ID_Bo=?", new String[]{String.valueOf(idbo)});
+
+        /*cauDienKhuyets.clear();
+        cauDienKhuyets.add(new CauDienKhuyet(1, idbo, ""));*/
 
         txtquestcountDK.setText("Question: " + (questioncurrent + 1) + "/" + cursor.getCount() + "");
 

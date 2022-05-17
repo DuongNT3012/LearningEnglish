@@ -173,36 +173,36 @@ public class ListeningActivity extends AppCompatActivity {
         cauLuyenNghes.clear();
         switch (idbo){
             case 1:
-                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", R.drawable.listening1, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", R.drawable.listening2, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", R.drawable.listening3, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", R.drawable.listening4, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", R.drawable.listening5, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", R.drawable.listening6, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
                 break;
             case 2:
-                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", R.drawable.listening1, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", R.drawable.listening2, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", R.drawable.listening3, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", R.drawable.listening4, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", R.drawable.listening5, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", R.drawable.listening6, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
                 break;
             case 3:
-                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", R.drawable.listening1, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", R.drawable.listening2, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", R.drawable.listening3, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", R.drawable.listening4, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", R.drawable.listening5, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", R.drawable.listening6, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
                 break;
             case 4:
-                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", null, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", null, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", null, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
-                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", null, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", R.drawable.listening1, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(2, idbo, "A", "B", "C", "D", "4", R.drawable.listening2, "https://github.com/Lap2000/songs/raw/main/hinh02.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(3, idbo, "A", "B", "C", "D", "1", R.drawable.listening3, "https://github.com/Lap2000/songs/raw/main/hinh03.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(4, idbo, "A", "B", "C", "D", "4", R.drawable.listening4, "https://github.com/Lap2000/songs/raw/main/hinh04.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", R.drawable.listening5, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
+                cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", R.drawable.listening6, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
                 break;
         }
     }
@@ -246,9 +246,10 @@ public class ListeningActivity extends AppCompatActivity {
                 intent.putExtra("qcount", pos);
                 startActivity(intent);
             } else {
-                byte[] anh = cauLuyenNghes.get(pos).getHinhanh();
-                Bitmap img = BitmapFactory.decodeByteArray(anh, 0, anh.length);
-                imHA.setImageBitmap(img);
+                int anh = cauLuyenNghes.get(pos).getHinhanh();
+                /*Bitmap img = BitmapFactory.decodeByteArray(anh, 0, anh.length);
+                imHA.setImageBitmap(img);*/
+                imHA.setImageResource(anh);
 
                 String URLaudio = cauLuyenNghes.get(pos).getAudio();
                 URL = URLaudio;
