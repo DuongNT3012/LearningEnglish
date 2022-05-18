@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.projectse.R;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
@@ -249,7 +250,8 @@ public class ListeningActivity extends AppCompatActivity {
                 int anh = cauLuyenNghes.get(pos).getHinhanh();
                 /*Bitmap img = BitmapFactory.decodeByteArray(anh, 0, anh.length);
                 imHA.setImageBitmap(img);*/
-                imHA.setImageResource(anh);
+                //imHA.setImageResource(anh);
+                Glide.with(this).load(anh).into(imHA);
 
                 String URLaudio = cauLuyenNghes.get(pos).getAudio();
                 URL = URLaudio;

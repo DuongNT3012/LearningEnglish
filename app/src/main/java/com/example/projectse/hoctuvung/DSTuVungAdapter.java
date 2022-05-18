@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.projectse.R;
 
 import java.util.List;
@@ -71,7 +72,8 @@ public class DSTuVungAdapter extends BaseAdapter {
         holder.twTuVung.setText(tuVung.getDapan() + "(" + tuVung.getLoaitu() + "):");
         /*Bitmap img = BitmapFactory.decodeByteArray(tuVung.getAnh(), 0, tuVung.getAnh().length);
         holder.imgHinh.setImageBitmap(img);*/
-        holder.imgHinh.setImageResource(tuVung.getAnh());
+        //holder.imgHinh.setImageResource(tuVung.getAnh());
+        Glide.with(context).load(tuVung.getAnh()).into(holder.imgHinh);
         holder.imgSpeaker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

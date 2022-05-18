@@ -49,7 +49,7 @@ public class LuyenNgheActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
+                /*database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
                 String a = null;
                 Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
                 for (int i = position; i < cursor.getCount(); i++) {
@@ -60,7 +60,8 @@ public class LuyenNgheActivity extends AppCompatActivity {
                     a = tenbo;
                     idbocauhoi = idbo;
                     break;
-                }
+                }*/
+                idbocauhoi = boCauHoiArrayList.get(position).getIdBo();
                 Intent quiz = new Intent(LuyenNgheActivity.this, ListeningActivity.class);
                 quiz.putExtra("Bo", idbocauhoi);
                 startActivity(quiz);

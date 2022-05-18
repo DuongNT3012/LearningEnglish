@@ -27,9 +27,10 @@ public class TracNghiemActivity extends AppCompatActivity {
     ArrayList<BoHocTap> boHocTapArrayList;
     BoHocTapAdapter boHocTapAdapter;
     ImageView imgback;
-    final  String DATABASE_NAME = "HocNgonNgu.db";
+    final String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     int idbocauhoi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +39,11 @@ public class TracNghiemActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_trac_nghiem);
 
-        listView= findViewById(R.id.lvtracnghiem);
+        listView = findViewById(R.id.lvtracnghiem);
         imgback = findViewById(R.id.imgVBackTN);
-        boHocTapArrayList =new ArrayList<>();
+        boHocTapArrayList = new ArrayList<>();
         AddArrayBTN();
-        boHocTapAdapter =new BoHocTapAdapter(TracNghiemActivity.this,R.layout.row_botracnghiem, boHocTapArrayList);
+        boHocTapAdapter = new BoHocTapAdapter(TracNghiemActivity.this, R.layout.row_botracnghiem, boHocTapArrayList);
         listView.setAdapter(boHocTapAdapter);
         boHocTapAdapter.notifyDataSetChanged();
 
@@ -50,20 +51,21 @@ public class TracNghiemActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                database= Database.initDatabase(TracNghiemActivity.this,DATABASE_NAME);
-                String a=null;
-                Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
-                for(int i=position;i<cursor.getCount();i++){
+                /*database = Database.initDatabase(TracNghiemActivity.this, DATABASE_NAME);
+                String a = null;
+                Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
+                for (int i = position; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
-                    int idbo=cursor.getInt(0);
-                    int stt=cursor.getInt(1);
-                    String tenbo=cursor.getString(2);
-                    a=tenbo;
-                    idbocauhoi=idbo;
+                    int idbo = cursor.getInt(0);
+                    int stt = cursor.getInt(1);
+                    String tenbo = cursor.getString(2);
+                    a = tenbo;
+                    idbocauhoi = idbo;
                     break;
-                }
-                Intent quiz= new Intent(TracNghiemActivity.this,QuizActivity.class);
-                quiz.putExtra("Bo",idbocauhoi);
+                }*/
+                idbocauhoi = boHocTapArrayList.get(position).getIdBo();
+                Intent quiz = new Intent(TracNghiemActivity.this, QuizActivity.class);
+                quiz.putExtra("Bo", idbocauhoi);
 
                 startActivity(quiz);
             }
@@ -76,7 +78,8 @@ public class TracNghiemActivity extends AppCompatActivity {
             }
         });
     }
-    private void AddArrayBTN(){
+
+    private void AddArrayBTN() {
         /*database= Database.initDatabase(TracNghiemActivity.this,DATABASE_NAME);
         Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
         boHocTapArrayList.clear();

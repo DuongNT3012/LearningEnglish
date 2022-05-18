@@ -138,7 +138,7 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
     }
 
     private void AddArraySXC() {
-        database = Database.initDatabase(ArrangeSentencesActivity.this, DATABASE_NAME);
+        /*database = Database.initDatabase(ArrangeSentencesActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM SapXepCau WHERE IDBo = ?", new String[]{String.valueOf(idbo)});
         cauSapXeps.clear();
 
@@ -153,7 +153,7 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
             String part4 = cursor.getString(6);
 
             cauSapXeps.add(new CauSapXep(idcau, idbo, dapan, part1, part2, part3, part4));
-        }
+        }*/
 
         switch (idbo) {
             case 1:

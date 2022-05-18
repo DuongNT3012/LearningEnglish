@@ -56,6 +56,38 @@ public class FillBlanksActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         idbo = intent.getIntExtra("BoDK", 0);
+
+        switch (idbo) {
+            case 1:
+                cauDienKhuyets.clear();
+                cauDienKhuyets.add(new CauDienKhuyet(1, 1, "The frog can___", "jump", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(2, 1, "The duck___swim", "can", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(3, 1, "The rabbit likes to___carrots", "eat", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(4, 1, "My dogs___fast", "run", "eat run can jump"));
+                break;
+            case 2:
+                cauDienKhuyets.clear();
+                cauDienKhuyets.add(new CauDienKhuyet(1, 2, "The frog can___", "jump", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(2, 2, "The duck___swim", "can", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(3, 2, "The rabbit likes to___carrots", "eat", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(4, 2, "My dogs___fast", "run", "eat run can jump"));
+                break;
+            case 3:
+                cauDienKhuyets.clear();
+                cauDienKhuyets.add(new CauDienKhuyet(1, 3, "The frog can___", "jump", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(2, 3, "The duck___swim", "can", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(3, 3, "The rabbit likes to___carrots", "eat", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(4, 3, "My dogs___fast", "run", "eat run can jump"));
+                break;
+            case 4:
+                cauDienKhuyets.clear();
+                cauDienKhuyets.add(new CauDienKhuyet(1, 4, "The frog can___", "jump", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(2, 4, "The duck___swim", "can", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(3, 4, "The rabbit likes to___carrots", "eat", "eat run can jump"));
+                cauDienKhuyets.add(new CauDienKhuyet(4, 4, "My dogs___fast", "run", "eat run can jump"));
+                break;
+        }
+
         txttimeDK.setText(" ");
         shownextquestion(questioncurrent);
 
@@ -116,18 +148,18 @@ public class FillBlanksActivity extends AppCompatActivity {
 
     public void shownextquestion(int pos) {
 
-        database = Database.initDatabase(FillBlanksActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM DienKhuyet WHERE ID_Bo=?", new String[]{String.valueOf(idbo)});
+        /*database = Database.initDatabase(FillBlanksActivity.this, DATABASE_NAME);
+        Cursor cursor = database.rawQuery("SELECT * FROM DienKhuyet WHERE ID_Bo=?", new String[]{String.valueOf(idbo)});*/
 
         /*cauDienKhuyets.clear();
         cauDienKhuyets.add(new CauDienKhuyet(1, idbo, ""));*/
 
-        txtquestcountDK.setText("Question: " + (questioncurrent + 1) + "/" + cursor.getCount() + "");
+        txtquestcountDK.setText("Question: " + (questioncurrent + 1) + "/" + cauDienKhuyets.size() + "");
 
         edtAnswerDK.setBackground(this.getResources().getDrawable(R.drawable.bgbtn));
 
 
-        if (pos == cursor.getCount()) {
+        if (pos == cauDienKhuyets.size()) {
             //DB.capnhatdiem(DB.iduser, user.getPoint(), score);
             Intent intent = new Intent(FillBlanksActivity.this, FinishDKActivity.class);
             intent.putExtra("scoreDK", score);
@@ -136,11 +168,11 @@ public class FillBlanksActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        for (int i = pos; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            String questcontent = cursor.getString(2);
-            answer = cursor.getString(3);
-            txtGoiy.setText(cursor.getString(4));
+        for (int i = pos; i < cauDienKhuyets.size(); i++) {
+            //cursor.moveToPosition(i);
+            String questcontent = cauDienKhuyets.get(i).getCauHoi();
+            answer = cauDienKhuyets.get(i).getDapan();
+            txtGoiy.setText(cauDienKhuyets.get(i).getGoiY());
             txtquestionDK.setText(questcontent);
             break;
         }

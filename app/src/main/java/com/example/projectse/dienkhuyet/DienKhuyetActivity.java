@@ -56,7 +56,7 @@ public class DienKhuyetActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                database= Database.initDatabase(DienKhuyetActivity.this,DATABASE_NAME);
+                /*database= Database.initDatabase(DienKhuyetActivity.this,DATABASE_NAME);
                 String a=null;
                 Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
                 for(int i=position;i<cursor.getCount();i++){
@@ -67,7 +67,8 @@ public class DienKhuyetActivity extends AppCompatActivity {
                     a=tenbo;
                     idbocauhoi=idbo;
                     break;
-                }
+                }*/
+                idbocauhoi = boHocTapArrayList.get(position).getIdBo();
                 Intent quiz= new Intent(DienKhuyetActivity.this, FillBlanksActivity.class);
                 quiz.putExtra("BoDK",idbocauhoi);
 

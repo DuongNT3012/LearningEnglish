@@ -226,23 +226,23 @@ public class DSTuVungActivity extends AppCompatActivity {
         DStuvung.clear();
         switch (idbo){
             case 1:
-                DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(2,idbo,"customer","Khách hàng","Danh từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(3,idbo,"purchase","Mua","Động từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(4,idbo,"item","Món hàng","Danh từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(5,idbo,"consultant","Tư vấn viên","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.president));
+                DStuvung.add(new TuVung(2,idbo,"customer","Khách hàng","Danh từ","", R.drawable.customer));
+                DStuvung.add(new TuVung(3,idbo,"purchase","Mua","Động từ","", R.drawable.purchase));
+                DStuvung.add(new TuVung(4,idbo,"item","Món hàng","Danh từ","", R.drawable.item));
+                DStuvung.add(new TuVung(5,idbo,"consultant","Tư vấn viên","Danh từ","", R.drawable.consultant));
                 break;
             case 2:
-                DStuvung.add(new TuVung(1,idbo,"resign","Từ chức","Động từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(2,idbo,"payroll","Lương","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(1,idbo,"resign","Từ chức","Động từ","", R.drawable.resign));
+                DStuvung.add(new TuVung(2,idbo,"payroll","Lương","Danh từ","", R.drawable.payroll));
                 break;
             case 3:
-                DStuvung.add(new TuVung(1,idbo,"advise","Khuyên bảo","Động từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(2,idbo,"leadership","Lãnh đạo","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(1,idbo,"advise","Khuyên bảo","Động từ","", R.drawable.advise));
+                DStuvung.add(new TuVung(2,idbo,"leadership","Lãnh đạo","Danh từ","", R.drawable.leadership));
                 break;
             case 4:
-                DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.ic_dollar));
-                DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.ic_dollar));
+                DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.consider));
+                DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.contract));
                 break;
         }
     }
