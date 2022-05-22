@@ -9,9 +9,9 @@ public class TuVung implements Serializable {
     private String dichnghia;
     private String loaitu;
     private String audio;
-    private int anh;
+    private String anh;
 
-    public TuVung(int idtu, int idbo, String dapan, String dichnghia, String loaitu, String audio, int anh) {
+    public TuVung(int idtu, int idbo, String dapan, String dichnghia, String loaitu, String audio, String anh) {
         this.idtu = idtu;
         this.idbo = idbo;
         this.dapan = dapan;
@@ -69,11 +69,11 @@ public class TuVung implements Serializable {
         this.audio = audio;
     }
 
-    public int getAnh() {
+    public String getAnh() {
         return anh;
     }
 
-    public void setAnh(int anh) {
+    public void setAnh(String anh) {
         this.anh = anh;
     }
 }

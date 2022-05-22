@@ -34,6 +34,9 @@ android {
             }
         }
     }
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {
@@ -59,6 +62,11 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
+    //Volley
+    implementation 'com.android.volley:volley:1.1.0'
+    //
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 apply plugin: 'com.android.application'

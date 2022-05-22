@@ -24,14 +24,29 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
+import com.example.projectse.bohoctap.BoHocTap;
+import com.example.projectse.bohoctap.BoHocTapAdapter;
 import com.example.projectse.ui.BottomSheetMic;
 import com.example.projectse.ui.IonClickBtsMic;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class DSTuVungActivity extends AppCompatActivity {
 
@@ -133,6 +148,7 @@ public class DSTuVungActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent ontap = new Intent(DSTuVungActivity.this, WordMattersActivity.class);
                 ontap.putExtra("idbo", idbo);
+                ontap.putExtra("DStuvung", DStuvung);
                 startActivity(ontap);
             }
         });
@@ -222,8 +238,51 @@ public class DSTuVungActivity extends AppCompatActivity {
 
             DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
         }*/
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetVocab, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String vocab = "";
+                String type = "";
+                String imgPreview = "";
+                String translate = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    DStuvung.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        vocab = jsonObject.getString("vocab");
+                        type = jsonObject.getString("type");
+                        imgPreview = jsonObject.getString("imgPreview");
+                        translate = jsonObject.getString("translate");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        DStuvung.add(new TuVung(id, idUnitCategory, vocab, translate, type, "", imgPreview));
+                    }
+                    dstuvungs.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-        DStuvung.clear();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+        /*DStuvung.clear();
         switch (idbo){
             case 1:
                 DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.president));
@@ -244,6 +303,6 @@ public class DSTuVungActivity extends AppCompatActivity {
                 DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.consider));
                 DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.contract));
                 break;
-        }
+        }*/
     }
 }

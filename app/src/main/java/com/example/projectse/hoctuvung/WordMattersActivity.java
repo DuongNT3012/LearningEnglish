@@ -203,7 +203,7 @@ public class WordMattersActivity extends AppCompatActivity {
 
             DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
         }*/
-        DStuvung.clear();
+        /*DStuvung.clear();
         switch (idbo){
             case 1:
                 DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.ic_dollar));
@@ -224,7 +224,7 @@ public class WordMattersActivity extends AppCompatActivity {
                 DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.ic_dollar));
                 DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.ic_dollar));
                 break;
-        }
+        }*/
     }
 
 
