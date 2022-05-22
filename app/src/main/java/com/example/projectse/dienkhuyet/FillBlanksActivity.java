@@ -18,12 +18,26 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FillBlanksActivity extends AppCompatActivity {
 
@@ -35,12 +49,13 @@ public class FillBlanksActivity extends AppCompatActivity {
     Button btnconfirm, btnQuit;
     int questioncurrent = 0;
     int questiontrue = 0;
-    String answer;
+    String answer1;
     int score = 0;
     int idbo;
 
     User user;
     ArrayList<CauDienKhuyet> cauDienKhuyets = new ArrayList<>();
+    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +72,68 @@ public class FillBlanksActivity extends AppCompatActivity {
         Intent intent = getIntent();
         idbo = intent.getIntExtra("BoDK", 0);
 
-        switch (idbo) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetFillBlank, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String question = "";
+                String answer = "";
+                String suggest = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    cauDienKhuyets.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        question = jsonObject.getString("question");
+                        answer = jsonObject.getString("answer");
+                        suggest = jsonObject.getString("suggest");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        cauDienKhuyets.add(new CauDienKhuyet(id, idUnitCategory, question, answer, suggest));
+                    }
+                    txttimeDK.setText(" ");
+                    shownextquestion(questioncurrent);
+
+
+                    countDownTimer = new CountDownTimer(3000, 2000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                            questioncurrent++;
+                            edtAnswerDK.setTextColor(Color.BLACK);
+                            btnconfirm.setEnabled(true);
+                            edtAnswerDK.setText("");
+                            answer1 = "";
+                            shownextquestion(questioncurrent);
+                        }
+                    };
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+        /*switch (idbo) {
             case 1:
                 cauDienKhuyets.clear();
                 cauDienKhuyets.add(new CauDienKhuyet(1, 1, "The frog can___", "jump", "eat run can jump"));
@@ -86,30 +162,7 @@ public class FillBlanksActivity extends AppCompatActivity {
                 cauDienKhuyets.add(new CauDienKhuyet(3, 4, "The rabbit likes to___carrots", "eat", "eat run can jump"));
                 cauDienKhuyets.add(new CauDienKhuyet(4, 4, "My dogs___fast", "run", "eat run can jump"));
                 break;
-        }
-
-        txttimeDK.setText(" ");
-        shownextquestion(questioncurrent);
-
-
-        CountDownTimer countDownTimer = new CountDownTimer(3000, 2000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-
-                questioncurrent++;
-                edtAnswerDK.setTextColor(Color.BLACK);
-                btnconfirm.setEnabled(true);
-                edtAnswerDK.setText("");
-                answer = "";
-                shownextquestion(questioncurrent);
-            }
-        };
-
+        }*/
 
         btnconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +224,7 @@ public class FillBlanksActivity extends AppCompatActivity {
         for (int i = pos; i < cauDienKhuyets.size(); i++) {
             //cursor.moveToPosition(i);
             String questcontent = cauDienKhuyets.get(i).getCauHoi();
-            answer = cauDienKhuyets.get(i).getDapan();
+            answer1 = cauDienKhuyets.get(i).getDapan();
             txtGoiy.setText(cauDienKhuyets.get(i).getGoiY());
             txtquestionDK.setText(questcontent);
             break;
@@ -179,14 +232,14 @@ public class FillBlanksActivity extends AppCompatActivity {
     }
 
     public void showanswer() {
-        edtAnswerDK.setText(answer);
+        edtAnswerDK.setText(answer1);
         edtAnswerDK.setTextColor(Color.GREEN);
         edtAnswerDK.clearFocus();
     }
 
     public void checkAnswer() {
         btnconfirm.setEnabled(false);
-        if (answer.equals(edtAnswerDK.getText().toString())) {
+        if (answer1.equals(edtAnswerDK.getText().toString())) {
             Toast.makeText(this, "Đáp án chính xác", Toast.LENGTH_SHORT).show();
             edtAnswerDK.setTextColor(Color.GREEN);
             questiontrue++;

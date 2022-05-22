@@ -10,10 +10,10 @@ public class CauLuyenNghe implements Serializable {
     private String dapanC;
     private String dapanD;
     private String dapanTrue;
-    private int hinhanh;
+    private String hinhanh;
     private String audio;
 
-    public CauLuyenNghe(int idbai, int idbo, String dapanA, String dapanB, String dapanC, String dapanD, String dapanTrue, int hinhanh, String audio) {
+    public CauLuyenNghe(int idbai, int idbo, String dapanA, String dapanB, String dapanC, String dapanD, String dapanTrue, String hinhanh, String audio) {
         this.idbai = idbai;
         this.idbo = idbo;
         this.dapanA = dapanA;
@@ -81,11 +81,11 @@ public class CauLuyenNghe implements Serializable {
         this.dapanTrue = dapanTrue;
     }
 
-    public int getHinhanh() {
+    public String getHinhanh() {
         return hinhanh;
     }
 
-    public void setHinhanh(int hinhanh) {
+    public void setHinhanh(String hinhanh) {
         this.hinhanh = hinhanh;
     }
 

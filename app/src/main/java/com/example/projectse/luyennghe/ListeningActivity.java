@@ -12,22 +12,42 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.projectse.R;
+import com.example.projectse.sapxepcau.ArrangeSentencesActivity;
+import com.example.projectse.sapxepcau.CauSapXep;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListeningActivity extends AppCompatActivity {
     final String DATABASE_NAME = "HocNgonNgu.db";
@@ -51,6 +71,7 @@ public class ListeningActivity extends AppCompatActivity {
     int answer = 0;
     int score = 0;
     int idbo;
+    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,38 +88,17 @@ public class ListeningActivity extends AppCompatActivity {
         cauLuyenNghes = new ArrayList<>();
         AddArrayCLN();
 
-        shownextquestion(questioncurrent, cauLuyenNghes);
 
-        // Create MediaPlayer.
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-            }
-        });
-        CountDownTimer countDownTimer = new CountDownTimer(3000, 300) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                showanswer();
-            }
-
-            @Override
-            public void onFinish() {
-
-                btnconfirm.setEnabled(true);
-                shownextquestion(questioncurrent, cauLuyenNghes);
-            }
-        };
         btnconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkans();
-                questioncurrent++;
-                countDownTimer.start();
-
+                if (!btnop1.isChecked() && !btnop2.isChecked() && !btnop3.isChecked() && !btnop4.isChecked()) {
+                    Toast.makeText(ListeningActivity.this, "Choose an answer", Toast.LENGTH_SHORT).show();
+                } else {
+                    checkans();
+                    questioncurrent++;
+                    countDownTimer.start();
+                }
             }
         });
 
@@ -171,7 +171,72 @@ public class ListeningActivity extends AppCompatActivity {
             cauLuyenNghes.add(new CauLuyenNghe(idbai, idbo, A, B, C, D, True, hinh, audio));
         }*/
 
-        cauLuyenNghes.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetListening, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String answer = "";
+                String imgPreview = "";
+                String audio = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    cauLuyenNghes.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        answer = jsonObject.getString("answer");
+                        imgPreview = jsonObject.getString("imgPreview");
+                        audio = jsonObject.getString("audio");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        cauLuyenNghes.add(new CauLuyenNghe(id, idUnitCategory, "A", "B", "C", "D", answer, imgPreview, audio));
+                    }
+                    shownextquestion(questioncurrent, cauLuyenNghes);
+
+                    // Create MediaPlayer.
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mp.start();
+                        }
+                    });
+                    countDownTimer = new CountDownTimer(3000, 300) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            showanswer();
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                            btnconfirm.setEnabled(true);
+                            shownextquestion(questioncurrent, cauLuyenNghes);
+                        }
+                    };
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+        /*cauLuyenNghes.clear();
         switch (idbo){
             case 1:
                 cauLuyenNghes.add(new CauLuyenNghe(1, idbo, "A", "B", "C", "D", "2", R.drawable.listening1, "https://github.com/Lap2000/songs/raw/main/hinh01.wav"));
@@ -205,7 +270,7 @@ public class ListeningActivity extends AppCompatActivity {
                 cauLuyenNghes.add(new CauLuyenNghe(5, idbo, "A", "B", "C", "D", "3", R.drawable.listening5, "https://github.com/Lap2000/songs/raw/main/hinh05.wav"));
                 cauLuyenNghes.add(new CauLuyenNghe(6, idbo, "A", "B", "C", "D", "3", R.drawable.listening6, "https://github.com/Lap2000/songs/raw/main/hinh06.wav"));
                 break;
-        }
+        }*/
     }
 
     public void LayUser() {
@@ -247,7 +312,7 @@ public class ListeningActivity extends AppCompatActivity {
                 intent.putExtra("qcount", pos);
                 startActivity(intent);
             } else {
-                int anh = cauLuyenNghes.get(pos).getHinhanh();
+                String anh = cauLuyenNghes.get(pos).getHinhanh();
                 /*Bitmap img = BitmapFactory.decodeByteArray(anh, 0, anh.length);
                 imHA.setImageBitmap(img);*/
                 //imHA.setImageResource(anh);

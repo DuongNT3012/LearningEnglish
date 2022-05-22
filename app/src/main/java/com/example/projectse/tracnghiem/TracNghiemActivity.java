@@ -13,13 +13,28 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.MainActivity;
 import com.example.projectse.R;
 import com.example.projectse.bohoctap.BoHocTap;
 import com.example.projectse.bohoctap.BoHocTapAdapter;
+import com.example.projectse.sapxepcau.SapXepCauActivity;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TracNghiemActivity extends AppCompatActivity {
 
@@ -43,10 +58,6 @@ public class TracNghiemActivity extends AppCompatActivity {
         imgback = findViewById(R.id.imgVBackTN);
         boHocTapArrayList = new ArrayList<>();
         AddArrayBTN();
-        boHocTapAdapter = new BoHocTapAdapter(TracNghiemActivity.this, R.layout.row_botracnghiem, boHocTapArrayList);
-        listView.setAdapter(boHocTapAdapter);
-        boHocTapAdapter.notifyDataSetChanged();
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,10 +102,50 @@ public class TracNghiemActivity extends AppCompatActivity {
             boHocTapArrayList.add(new BoHocTap(idbo,stt,tenbo));
 
         }*/
-        boHocTapArrayList.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String name = "";
+                String imgPreview = "";
+                int idSubjectCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    boHocTapArrayList.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        name = jsonObject.getString("name");
+                        imgPreview = jsonObject.getString("imgPreview");
+                        idSubjectCategory = jsonObject.getInt("idSubjectCategory");
+                        boHocTapArrayList.add(new BoHocTap(id, id, name));
+                    }
+                    boHocTapAdapter = new BoHocTapAdapter(TracNghiemActivity.this, R.layout.row_botracnghiem, boHocTapArrayList);
+                    listView.setAdapter(boHocTapAdapter);
+                    boHocTapAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idSubjectCategory", String.valueOf(2));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+        /*boHocTapArrayList.clear();
         boHocTapArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
         boHocTapArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
         boHocTapArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boHocTapArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
+        boHocTapArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

@@ -20,12 +20,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
+import com.example.projectse.hoctuvung.TuVung;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class ArrangeSentencesActivity extends AppCompatActivity {
@@ -64,41 +79,6 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
         cauSapXeps = new ArrayList<>();
         AddArraySXC();
         LayUser();
-
-
-        try {
-            textAnswer = cauSapXeps.get(0).getDapan();
-
-
-            smallbigforth = AnimationUtils.loadAnimation(this, R.anim.smallbigforth);
-
-
-            keys[0] = cauSapXeps.get(0).getPart1();
-            keys[1] = cauSapXeps.get(0).getPart2();
-            keys[2] = cauSapXeps.get(0).getPart3();
-            keys[3] = cauSapXeps.get(0).getPart4();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        tvQuestionCount.setText("Question: " + cau + "/" + cauSapXeps.size());
-        tvScore.setText("Score: " + score);
-
-
-        keys = shuffleArray(keys);
-
-        dem = 0;
-        while (dem < keys.length) {
-            if (dem < 1) {
-                addView(((LinearLayout) findViewById(R.id.layoutPart1)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-            } else if (dem < 2) {
-                addView(((LinearLayout) findViewById(R.id.layoutPart2)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-            } else if (dem < 3) {
-                addView(((LinearLayout) findViewById(R.id.layoutPart3)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-            } else
-                addView(((LinearLayout) findViewById(R.id.layoutPart4)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-            dem++;
-        }
 
         btnquit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +135,84 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
             cauSapXeps.add(new CauSapXep(idcau, idbo, dapan, part1, part2, part3, part4));
         }*/
 
-        switch (idbo) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetArrangeSentence, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String answer = "";
+                String a = "";
+                String b = "";
+                String c = "";
+                String d = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    cauSapXeps.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        answer = jsonObject.getString("answer");
+                        a = jsonObject.getString("part1");
+                        b = jsonObject.getString("part2");
+                        c = jsonObject.getString("part3");
+                        d = jsonObject.getString("part4");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        cauSapXeps.add(new CauSapXep(id, idUnitCategory, answer, a, b, c, d));
+                    }
+                    try {
+                        textAnswer = cauSapXeps.get(0).getDapan();
+
+
+                        smallbigforth = AnimationUtils.loadAnimation(ArrangeSentencesActivity.this, R.anim.smallbigforth);
+
+
+                        keys[0] = cauSapXeps.get(0).getPart1();
+                        keys[1] = cauSapXeps.get(0).getPart2();
+                        keys[2] = cauSapXeps.get(0).getPart3();
+                        keys[3] = cauSapXeps.get(0).getPart4();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    tvQuestionCount.setText("Question: " + cau + "/" + cauSapXeps.size());
+                    tvScore.setText("Score: " + score);
+
+
+                    keys = shuffleArray(keys);
+
+                    dem = 0;
+                    while (dem < keys.length) {
+                        if (dem < 1) {
+                            addView(((LinearLayout) findViewById(R.id.layoutPart1)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
+                        } else if (dem < 2) {
+                            addView(((LinearLayout) findViewById(R.id.layoutPart2)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
+                        } else if (dem < 3) {
+                            addView(((LinearLayout) findViewById(R.id.layoutPart3)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
+                        } else
+                            addView(((LinearLayout) findViewById(R.id.layoutPart4)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
+                        dem++;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+        /*switch (idbo) {
             case 1:
                 cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
                 cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
@@ -184,7 +241,7 @@ public class ArrangeSentencesActivity extends AppCompatActivity {
                 cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
                 cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
                 break;
-        }
+        }*/
     }
 
     private String[] shuffleArray(String[] ar) {

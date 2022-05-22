@@ -13,13 +13,28 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.MainActivity;
 import com.example.projectse.R;
 import com.example.projectse.bohoctap.BoHocTap;
 import com.example.projectse.bohoctap.BoHocTapAdapter;
+import com.example.projectse.dienkhuyet.DienKhuyetActivity;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LuyenNgheActivity extends AppCompatActivity {
     ListView listView;
@@ -88,10 +103,50 @@ public class LuyenNgheActivity extends AppCompatActivity {
             boCauHoiArrayList.add(new BoHocTap(idbo, stt, tenbo));
 
         }*/
-        boCauHoiArrayList.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String name = "";
+                String imgPreview = "";
+                int idSubjectCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    boCauHoiArrayList.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        name = jsonObject.getString("name");
+                        imgPreview = jsonObject.getString("imgPreview");
+                        idSubjectCategory = jsonObject.getInt("idSubjectCategory");
+                        boCauHoiArrayList.add(new BoHocTap(id, id, name));
+                    }
+                    boCauHoiAdapter = new BoHocTapAdapter(LuyenNgheActivity.this, R.layout.row_bobainghe, boCauHoiArrayList);
+                    listView.setAdapter(boCauHoiAdapter);
+                    boCauHoiAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idSubjectCategory", String.valueOf(4));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+        /*boCauHoiArrayList.clear();
         boCauHoiArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
         boCauHoiArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
         boCauHoiArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boCauHoiArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));
+        boCauHoiArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

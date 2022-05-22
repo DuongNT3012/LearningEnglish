@@ -15,12 +15,27 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
+import com.example.projectse.hoctuvung.TuVung;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -40,6 +55,7 @@ public class QuizActivity extends AppCompatActivity {
     int idbo;
 
     User user;
+    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +74,7 @@ public class QuizActivity extends AppCompatActivity {
 
         cauTracNghiems = new ArrayList<>();
         AddArrayCTN();
-        shownextquestion(questioncurrent, cauTracNghiems);
 
-        CountDownTimer countDownTimer = new CountDownTimer(3000, 300) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                showanswer();
-            }
-
-            @Override
-            public void onFinish() {
-
-                btnconfirm.setEnabled(true);
-                shownextquestion(questioncurrent, cauTracNghiems);
-            }
-        };
         btnconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +125,68 @@ public class QuizActivity extends AppCompatActivity {
             cauTracNghiems.add(new CauTracNghiem(idcau, idbo, noidung, A, B, C, D, True));
         }*/
 
-        switch (idbo){
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetMultipleChoice, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String question = "";
+                String a = "";
+                String b = "";
+                String c = "";
+                String d = "";
+                String answer = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    cauTracNghiems.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        question = jsonObject.getString("question");
+                        a = jsonObject.getString("a");
+                        b = jsonObject.getString("b");
+                        c = jsonObject.getString("c");
+                        d = jsonObject.getString("d");
+                        answer = jsonObject.getString("answer");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        cauTracNghiems.add(new CauTracNghiem(id, idUnitCategory, question, a, b, c, d, answer));
+                    }
+                    shownextquestion(questioncurrent, cauTracNghiems);
+
+                    countDownTimer = new CountDownTimer(3000, 300) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            showanswer();
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                            btnconfirm.setEnabled(true);
+                            shownextquestion(questioncurrent, cauTracNghiems);
+                        }
+                    };
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+        /*switch (idbo) {
             case 1:
                 cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
                 cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
@@ -140,7 +203,7 @@ public class QuizActivity extends AppCompatActivity {
                 cauTracNghiems.add(new CauTracNghiem(1, idbo, "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.", "to", "by", "on", "for", "1"));
                 cauTracNghiems.add(new CauTracNghiem(2, idbo, "All the important files were organized first by color and .......... alphabetized by the title and name.", "since", "here", "then", "much", "3"));
                 break;
-        }
+        }*/
     }
 
     public void LayUser() {
