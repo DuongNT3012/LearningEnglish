@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/yellowbackground"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".user.ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/bungee"
+            android:gravity="center"
             android:text="English Master"
             android:textSize="30sp"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
@@ -30,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:visibility="invisible"
             android:layout_marginLeft="16dp"
             android:text="Language Learning Application"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
@@ -51,9 +53,9 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
-            android:layout_height="175dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3">
@@ -65,7 +67,6 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
-
                 app:cardCornerRadius="20dp">
 
                 <RelativeLayout
@@ -74,13 +75,14 @@
 
                     <TextView
                         android:id="@+id/tvHTV"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivHTV"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/bungee"
-                        android:text="Học Từ Vựng"
+                        android:gravity="center"
+                        android:text="Từ Vựng"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -108,12 +110,13 @@
 
                     <TextView
                         android:id="@+id/tvTN"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivTN"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/bungee"
+                        android:gravity="center"
                         android:text="Trắc Nghiệm" />
 
                     <ImageView
@@ -130,9 +133,9 @@
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="0dp"
-            android:layout_height="175dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -153,12 +156,13 @@
 
                     <TextView
                         android:id="@+id/tvSXC"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivSXC"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/bungee"
+                        android:gravity="center"
                         android:text="Sắp Xếp Câu"
                         android:textSize="14sp" />
 
@@ -188,12 +192,13 @@
 
                     <TextView
                         android:id="@+id/tvLN"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivLN"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/bungee"
+                        android:gravity="center"
                         android:text="Luyện Nghe" />
 
                     <ImageView
@@ -210,9 +215,9 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="175dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -233,12 +238,13 @@
 
                     <TextView
                         android:id="@+id/tvDK"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivDK"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/bungee"
+                        android:gravity="center"
                         android:text="Điền Khuyết"
                         android:textSize="14sp" />
 
@@ -260,8 +266,8 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                app:cardCornerRadius="20dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:cardCornerRadius="20dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

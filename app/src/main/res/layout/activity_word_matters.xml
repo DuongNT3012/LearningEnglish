@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/yellowbackground"
-    tools:context=".hoctuvung.WordMattersActivity">
+    tools:context=".user.hoctuvung.WordMattersActivity">
 
     <TextView
         android:id="@+id/textScreen"

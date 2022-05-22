@@ -5,7 +5,7 @@
     app:layoutDescription="@xml/login_motion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".taikhoan.LoginActivity">
+    tools:context=".user.taikhoan.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView_logo"

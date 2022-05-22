@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/yellowbackground"
-    tools:context=".sapxepcau.SapXepCauActivity">
+    tools:context=".user.sapxepcau.SapXepCauActivity">
 
     <TextView
         android:id="@+id/textSXC"

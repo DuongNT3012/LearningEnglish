@@ -23,49 +23,60 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectSE"
         android:usesCleartextTraffic="true">
-        <activity android:name=".login.DangNhap">
+        <activity android:name=".user.login.DangNhap">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".taikhoan.RankingActivity" />
-        <activity android:name=".dienkhuyet.FinishDKActivity" />
-        <activity android:name=".dienkhuyet.FillBlanksActivity" />
-        <activity android:name=".dienkhuyet.DienKhuyetActivity" />
-        <activity android:name=".taikhoan.ForgotPasswordActivity" />
-        <activity android:name=".sapxepcau.FinishSXCActivity" />
-        <activity android:name=".tracnghiem.FinishQuizActivity" />
-        <activity android:name=".tracnghiem.QuizActivity" />
-        <activity android:name=".tracnghiem.TracNghiemActivity" />
-        <activity android:name=".luyennghe.FinishQuizLSActivity" />
-        <activity android:name=".luyennghe.LuyenNgheActivity" />
-        <activity android:name=".taikhoan.ThongTinTaikhoanActivity" />
-        <activity android:name=".sapxepcau.ArrangeSentencesActivity" />
-        <activity android:name=".sapxepcau.SapXepCauActivity" />
-        <activity android:name=".hoctuvung.FinishHTVActivity" />
-        <activity android:name=".hoctuvung.WordMattersActivity" />
-        <activity android:name=".hoctuvung.DSTuVungActivity" />
-        <activity android:name=".hoctuvung.HocTuVungActivity" />
-        <activity android:name=".luyennghe.ListeningActivity" />
+        <activity android:name=".user.taikhoan.RankingActivity" />
+        <activity android:name=".user.dienkhuyet.FinishDKActivity" />
+        <activity android:name=".user.dienkhuyet.FillBlanksActivity" />
+        <activity android:name=".user.dienkhuyet.DienKhuyetActivity" />
+        <activity android:name=".user.taikhoan.ForgotPasswordActivity" />
+        <activity android:name=".user.sapxepcau.FinishSXCActivity" />
+        <activity android:name=".user.tracnghiem.FinishQuizActivity" />
+        <activity android:name=".user.tracnghiem.QuizActivity" />
+        <activity android:name=".user.tracnghiem.TracNghiemActivity" />
+        <activity android:name=".user.luyennghe.FinishQuizLSActivity" />
+        <activity android:name=".user.luyennghe.LuyenNgheActivity" />
+        <activity android:name=".user.taikhoan.ThongTinTaikhoanActivity" />
+        <activity android:name=".user.sapxepcau.ArrangeSentencesActivity" />
+        <activity android:name=".user.sapxepcau.SapXepCauActivity" />
+        <activity android:name=".user.hoctuvung.FinishHTVActivity" />
+        <activity android:name=".user.hoctuvung.WordMattersActivity" />
+        <activity android:name=".user.hoctuvung.DSTuVungActivity" />
+        <activity android:name=".user.hoctuvung.HocTuVungActivity" />
+        <activity android:name=".user.luyennghe.ListeningActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".user.MainActivity"
             android:theme="@style/Theme.ProjectSE.NoActionBar">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
-        <activity android:name=".taikhoan.Signup" />
-        <activity android:name=".taikhoan.LoginActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".user.taikhoan.Signup" />
+        <activity android:name=".user.taikhoan.LoginActivity">
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+        <!--Admin-->
+        <activity android:name=".admin.dienkhuyet.FinishDKActivityAdmin" />
+        <activity android:name=".admin.dienkhuyet.FillBlanksActivityAdmin" />
+        <activity android:name=".admin.dienkhuyet.DienKhuyetActivityAdmin" />
+        <activity android:name=".admin.sapxepcau.FinishSXCActivityAdmin" />
+        <activity android:name=".admin.tracnghiem.FinishQuizActivityAdmin" />
+        <activity android:name=".admin.tracnghiem.QuizActivityAdmin" />
+        <activity android:name=".admin.tracnghiem.TracNghiemActivityAdmin" />
+        <activity android:name=".admin.luyennghe.FinishQuizLSActivityAdmin" />
+        <activity android:name=".admin.luyennghe.LuyenNgheActivityAdmin" />
+        <activity android:name=".admin.sapxepcau.ArrangeSentencesActivityAdmin" />
+        <activity android:name=".admin.sapxepcau.SapXepCauActivityAdmin" />
+        <activity android:name=".admin.hoctuvung.FinishHTVActivityAdmin" />
+        <activity android:name=".admin.hoctuvung.WordMattersActivityAdmin" />
+        <activity android:name=".admin.hoctuvung.DSTuVungActivityAdmin" />
+        <activity android:name=".admin.hoctuvung.HocTuVungActivityAdmin" />
+        <activity android:name=".admin.luyennghe.ListeningActivityAdmin" />
+        <activity
+            android:name=".admin.MainActivityAdmin"
+            android:theme="@style/Theme.ProjectSE.NoActionBar">
         </activity>
     </application>
-
 </manifest>
