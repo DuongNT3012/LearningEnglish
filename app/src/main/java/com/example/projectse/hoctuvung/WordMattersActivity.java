@@ -26,13 +26,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
 import com.example.projectse.luyennghe.MediaPlayerUtils;
 import com.example.projectse.taikhoan.DatabaseAccess;
 import com.example.projectse.taikhoan.User;
 import com.example.projectse.ui.home.Database;
+import com.example.projectse.ultils.Server;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class WordMattersActivity extends AppCompatActivity {
@@ -87,47 +101,6 @@ public class WordMattersActivity extends AppCompatActivity {
 
         AddArrayTV();
 
-        // Create MediaPlayer.
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-            }
-        });
-
-
-        /*Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(0).getAnh(), 0, DStuvung.get(0).getAnh().length);
-        imgview.setImageBitmap(img);*/
-        imgview.startAnimation(smalltobig);
-        textQuestion.setText("(" + DStuvung.get(0).getLoaitu() + ") - " + "(" + DStuvung.get(0).getDichnghia() + ")");
-        tvWordCount.setText("Word: " + tu + "/" + DStuvung.size());
-        tvScore.setText("Score: " + score);
-
-        textAnswer = DStuvung.get(0).getDapan();
-        URL = DStuvung.get(0).getAudio();
-
-
-        smallbigforth = AnimationUtils.loadAnimation(this, R.anim.smallbigforth);
-
-        for (int i = 0; i < textAnswer.length(); i++) {
-            keys[i] = String.valueOf(textAnswer.charAt(i));
-        }
-
-        keys = shuffleArray(keys);
-
-        dem = 0;
-        while (dem < keys.length) {
-            if (dem < 4) {
-                addView(((LinearLayout) findViewById(R.id.layoutParent1)), keys[dem], ((EditText) findViewById(R.id.editText)));
-            } else if (dem < 8) {
-                addView(((LinearLayout) findViewById(R.id.layoutParent2)), keys[dem], ((EditText) findViewById(R.id.editText)));
-            } else
-                addView(((LinearLayout) findViewById(R.id.layoutParent3)), keys[dem], ((EditText) findViewById(R.id.editText)));
-            dem++;
-        }
-
         // When the video file ready for playback.
         ListenTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,9 +124,6 @@ public class WordMattersActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-        maxPresCounter = textAnswer.length();
     }
 
     private void AnhXa() {
@@ -203,6 +173,90 @@ public class WordMattersActivity extends AppCompatActivity {
 
             DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
         }*/
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetVocab, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id = 0;
+                String vocab = "";
+                String type = "";
+                String imgPreview = "";
+                String translate = "";
+                int idUnitCategory = 0;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    DStuvung.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        id = jsonObject.getInt("id");
+                        vocab = jsonObject.getString("vocab");
+                        type = jsonObject.getString("type");
+                        imgPreview = jsonObject.getString("imgPreview");
+                        translate = jsonObject.getString("translate");
+                        idUnitCategory = jsonObject.getInt("idUnitCategory");
+                        DStuvung.add(new TuVung(id, idUnitCategory, vocab, translate, type, "", imgPreview));
+                    }
+                    // Create MediaPlayer.
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mp.start();
+                        }
+                    });
+
+
+        /*Bitmap img = BitmapFactory.decodeByteArray(DStuvung.get(0).getAnh(), 0, DStuvung.get(0).getAnh().length);
+        imgview.setImageBitmap(img);*/
+                    imgview.startAnimation(smalltobig);
+                    textQuestion.setText("(" + DStuvung.get(0).getLoaitu() + ") - " + "(" + DStuvung.get(0).getDichnghia() + ")");
+                    tvWordCount.setText("Word: " + tu + "/" + DStuvung.size());
+                    tvScore.setText("Score: " + score);
+
+                    textAnswer = DStuvung.get(0).getDapan();
+                    URL = DStuvung.get(0).getAudio();
+
+
+                    smallbigforth = AnimationUtils.loadAnimation(WordMattersActivity.this, R.anim.smallbigforth);
+
+                    for (int i = 0; i < textAnswer.length(); i++) {
+                        keys[i] = String.valueOf(textAnswer.charAt(i));
+                    }
+
+                    keys = shuffleArray(keys);
+
+                    dem = 0;
+                    while (dem < keys.length) {
+                        if (dem < 4) {
+                            addView(((LinearLayout) findViewById(R.id.layoutParent1)), keys[dem], ((EditText) findViewById(R.id.editText)));
+                        } else if (dem < 8) {
+                            addView(((LinearLayout) findViewById(R.id.layoutParent2)), keys[dem], ((EditText) findViewById(R.id.editText)));
+                        } else
+                            addView(((LinearLayout) findViewById(R.id.layoutParent3)), keys[dem], ((EditText) findViewById(R.id.editText)));
+                        dem++;
+                    }
+                    maxPresCounter = textAnswer.length();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+                param.put("idUnitCategory", String.valueOf(idbo));
+                return param;
+            }
+        };
+        requestQueue.add(stringRequest);
+
         /*DStuvung.clear();
         switch (idbo){
             case 1:
