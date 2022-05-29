@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,7 +24,13 @@ import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
 import com.example.projectse.admin.bohoctap.BoHocTapAdmin;
 import com.example.projectse.admin.bohoctap.BoHocTapAdapterAdmin;
+import com.example.projectse.admin.bohoctap.IonClickItemUnit;
+import com.example.projectse.admin.dialog.DialogAddUnit;
+import com.example.projectse.admin.dialog.IonClickDialogAddUnit;
+import com.example.projectse.admin.hoctuvung.HocTuVungActivityAdmin;
+import com.example.projectse.admin.tracnghiem.TracNghiemActivityAdmin;
 import com.example.projectse.ultils.Server;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,23 +42,30 @@ import java.util.Map;
 
 public class DienKhuyetActivityAdmin extends AppCompatActivity {
 
-    ListView listView;
+    RecyclerView listView;
     ImageView imgback;
     ArrayList<BoHocTapAdmin> boHocTapAdminArrayList;
     BoHocTapAdapterAdmin boHocTapAdapterAdmin;
     final  String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     int idbocauhoi;
+    int idSubjectCategory = 0;
+    FloatingActionButton btnAdd;
+    DialogAddUnit dialogAddUnit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_dien_khuyet);
+        setContentView(R.layout.activity_dien_khuyet_admin);
+
+        idSubjectCategory = getIntent().getIntExtra("idSubjectCategory", 0);
 
         listView= findViewById(R.id.lvdienkhuyet);
         imgback = findViewById(R.id.imgVBackDK);
+        btnAdd = findViewById(R.id.btn_add);
         boHocTapAdminArrayList =new ArrayList<>();
         AddArrayBTN();
         imgback.setOnClickListener(new View.OnClickListener() {
@@ -60,42 +75,43 @@ public class DienKhuyetActivityAdmin extends AppCompatActivity {
             }
         });
 
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*database= Database.initDatabase(DienKhuyetActivity.this,DATABASE_NAME);
-                String a=null;
-                Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
-                for(int i=position;i<cursor.getCount();i++){
-                    cursor.moveToPosition(i);
-                    int idbo=cursor.getInt(0);
-                    int stt=cursor.getInt(1);
-                    String tenbo=cursor.getString(2);
-                    a=tenbo;
-                    idbocauhoi=idbo;
-                    break;
-                }*/
-                idbocauhoi = boHocTapAdminArrayList.get(position).getIdBo();
-                Intent quiz= new Intent(DienKhuyetActivityAdmin.this, FillBlanksActivityAdmin.class);
-                quiz.putExtra("BoDK",idbocauhoi);
+            public void onClick(View view) {
+                dialogAddUnit = new DialogAddUnit(DienKhuyetActivityAdmin.this, new IonClickDialogAddUnit() {
+                    @Override
+                    public void onClickDialogAddUnit(String name, String imgPreviewLink) {
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlAddUnit, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                AddArrayBTN();
+                                dialogAddUnit.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
 
-                startActivity(quiz);
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String, String> param = new HashMap<>();
+                                param.put("name", name);
+                                param.put("imgPreview", imgPreviewLink);
+                                param.put("idSubjectCategory", String.valueOf(idSubjectCategory));
+                                param.put("active", String.valueOf(0));
+                                return param;
+                            }
+                        };
+                        requestQueue1.add(stringRequest1);
+                    }
+                });
+                dialogAddUnit.show();
             }
         });
     }
     private void AddArrayBTN(){
-        /*database= Database.initDatabase(DienKhuyetActivity.this,DATABASE_NAME);
-        Cursor cursor=database.rawQuery("SELECT * FROM BoCauHoi",null);
-        boHocTapArrayList.clear();
-        for (int i = 0; i < cursor.getCount(); i++){
-            cursor.moveToPosition(i);
-            int idbo = cursor.getInt(0);
-            int  stt = cursor.getInt(1);
-            String tenbo = cursor.getString(2);
-            boHocTapArrayList.add(new BoHocTap(idbo,stt,tenbo));
-
-        }*/
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
             @Override
@@ -115,8 +131,42 @@ public class DienKhuyetActivityAdmin extends AppCompatActivity {
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
                         boHocTapAdminArrayList.add(new BoHocTapAdmin(id, id, name));
                     }
-                    boHocTapAdapterAdmin =new BoHocTapAdapterAdmin(DienKhuyetActivityAdmin.this,R.layout.row_bo, boHocTapAdminArrayList);
+                    boHocTapAdapterAdmin =new BoHocTapAdapterAdmin(DienKhuyetActivityAdmin.this, R.layout.row_bo_admin, boHocTapAdminArrayList, new IonClickItemUnit() {
+                        @Override
+                        public void onClickItemUnit(int position) {
+                            idbocauhoi = boHocTapAdminArrayList.get(position).getIdBo();
+                            Intent quiz= new Intent(DienKhuyetActivityAdmin.this, FillBlanksActivityAdmin.class);
+                            quiz.putExtra("BoDK",idbocauhoi);
+                            startActivity(quiz);
+                        }
+
+                        @Override
+                        public void onClickDelete(int idUnitCategory) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlDeleteUnit, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArrayBTN();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(idUnitCategory));
+                                    param.put("active", String.valueOf(1));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    });
                     listView.setAdapter(boHocTapAdapterAdmin);
+                    listView.setLayoutManager(new LinearLayoutManager(DienKhuyetActivityAdmin.this, LinearLayoutManager.VERTICAL, false));
                     boHocTapAdapterAdmin.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -136,11 +186,5 @@ public class DienKhuyetActivityAdmin extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-
-        /*boHocTapArrayList.clear();
-        boHocTapArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
-        boHocTapArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
-        boHocTapArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boHocTapArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

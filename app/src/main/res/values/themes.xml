@@ -17,6 +17,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    // set up base dialog
+    <style name="BaseDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--        <item name="android:layout_margin">@dimen/_3sdp</item>-->
+    </style>
+
     <style name="Theme.ProjectSE.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

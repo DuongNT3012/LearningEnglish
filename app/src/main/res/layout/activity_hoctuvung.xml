@@ -16,24 +16,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-
         android:layout_marginTop="18dp"
         android:text="Hello!"
         android:textColor="@color/black"
         android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="Learning!"
+        android:text="Vocabulary!"
         android:textColor="@color/black"
         android:textSize="36sp"
-        android:textStyle="bold
-"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.535"
         app:layout_constraintStart_toStartOf="@+id/textView"
@@ -41,13 +40,12 @@
 
     <ListView
         android:id="@+id/listviewHTV"
-        android:layout_width="399dp"
+        android:layout_width="match_parent"
         android:layout_height="465dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="135dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +55,6 @@
         android:id="@+id/imgVBackHTV"
         android:layout_width="60dp"
         android:layout_height="60dp"
-
         android:layout_marginTop="5dp"
         android:layout_marginBottom="80dp"
         android:src="@drawable/ic_back"

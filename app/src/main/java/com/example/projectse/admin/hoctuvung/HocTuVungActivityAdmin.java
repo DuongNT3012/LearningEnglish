@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,7 +22,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
 import com.example.projectse.admin.bohoctap.BoHocTapAdmin;
 import com.example.projectse.admin.bohoctap.BoHocTapAdapterAdmin;
+import com.example.projectse.admin.bohoctap.IonClickItemUnit;
+import com.example.projectse.admin.dialog.DialogAddUnit;
+import com.example.projectse.admin.dialog.IonClickDialogAddUnit;
 import com.example.projectse.ultils.Server;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,10 +44,12 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
 
     ArrayList<BoHocTapAdmin> boTuVungs;
     BoHocTapAdapterAdmin adapter;
-    ListView botuvungs;
+    RecyclerView botuvungs;
 
     int idbo;
-
+    int idSubjectCategory = 0;
+    FloatingActionButton btnAdd;
+    DialogAddUnit dialogAddUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +57,15 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_hoctuvung);
+        setContentView(R.layout.activity_hoctuvung_admin);
+
+        idSubjectCategory = getIntent().getIntExtra("idSubjectCategory", 0);
+
         botuvungs = findViewById(R.id.listviewHTV);
         imgback = findViewById(R.id.imgVBackHTV);
+        btnAdd = findViewById(R.id.btn_add);
         boTuVungs = new ArrayList<>();
         AddArrayBTV();
-
-        botuvungs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idbo = boTuVungs.get(position).getIdBo();
-                Intent dstv = new Intent(HocTuVungActivityAdmin.this, DSTuVungActivityAdmin.class);
-                dstv.putExtra("idbo", idbo);
-                startActivity(dstv);
-            }
-        });
 
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,20 +73,45 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAddUnit = new DialogAddUnit(HocTuVungActivityAdmin.this, new IonClickDialogAddUnit() {
+                    @Override
+                    public void onClickDialogAddUnit(String name, String imgPreviewLink) {
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlAddUnit, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                AddArrayBTV();
+                                dialogAddUnit.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String, String> param = new HashMap<>();
+                                param.put("name", name);
+                                param.put("imgPreview", imgPreviewLink);
+                                param.put("idSubjectCategory", String.valueOf(idSubjectCategory));
+                                param.put("active", String.valueOf(0));
+                                return param;
+                            }
+                        };
+                        requestQueue1.add(stringRequest1);
+                    }
+                });
+                dialogAddUnit.show();
+            }
+        });
     }
 
     private void AddArrayBTV() {
-        /*database = Database.initDatabase(HocTuVungActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
-        boTuVungs.clear();
-
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            int idbo = cursor.getInt(0);
-            int stt = cursor.getInt(1);
-            String tenbo = cursor.getString(2);
-            boTuVungs.add(new BoHocTap(idbo, stt, tenbo));
-        }*/
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
             @Override
@@ -106,8 +131,42 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
                         boTuVungs.add(new BoHocTapAdmin(id, id, name));
                     }
-                    adapter = new BoHocTapAdapterAdmin(HocTuVungActivityAdmin.this, R.layout.row_bo, boTuVungs);
+                    adapter = new BoHocTapAdapterAdmin(HocTuVungActivityAdmin.this, R.layout.row_bo_admin, boTuVungs, new IonClickItemUnit() {
+                        @Override
+                        public void onClickItemUnit(int position) {
+                            idbo = boTuVungs.get(position).getIdBo();
+                            Intent dstv = new Intent(HocTuVungActivityAdmin.this, DSTuVungActivityAdmin.class);
+                            dstv.putExtra("idbo", idbo);
+                            startActivity(dstv);
+                        }
+
+                        @Override
+                        public void onClickDelete(int idUnitCategory) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlDeleteUnit, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArrayBTV();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(idUnitCategory));
+                                    param.put("active", String.valueOf(1));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    });
                     botuvungs.setAdapter(adapter);
+                    botuvungs.setLayoutManager(new LinearLayoutManager(HocTuVungActivityAdmin.this, LinearLayoutManager.VERTICAL, false));
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -122,15 +181,10 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> param = new HashMap<>();
-                param.put("idSubjectCategory", String.valueOf(1));
+                param.put("idSubjectCategory", String.valueOf(idSubjectCategory));
                 return param;
             }
         };
         requestQueue.add(stringRequest);
-        /*boTuVungs.clear();
-        boTuVungs.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
-        boTuVungs.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
-        boTuVungs.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boTuVungs.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

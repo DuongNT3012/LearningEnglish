@@ -28,9 +28,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
+import com.example.projectse.admin.dialog.DialogAddVocab;
+import com.example.projectse.admin.dialog.IonClickDialogAddUnit;
+import com.example.projectse.admin.dialog.IonClickDialogAddVocab;
 import com.example.projectse.admin.ui.BottomSheetMic;
 import com.example.projectse.admin.ui.IonClickBtsMic;
 import com.example.projectse.ultils.Server;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +60,8 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
     BottomSheetMic bottomSheetMic;
     SpeechRecognizer speechRecognizer;
     Intent speechIntent;
+    FloatingActionButton btnAdd;
+    DialogAddVocab dialogAddVocab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,7 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_ds_tuvung);
+        setContentView(R.layout.activity_ds_tuvung_admin);
 
         Intent intent = getIntent();
         idbo = intent.getIntExtra("idbo", 0);
@@ -71,6 +77,7 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
         dstuvungs = (GridView) findViewById(R.id.lgvTuVung);
         Ontap = (Button) findViewById(R.id.btnOnTap);
         imgback = findViewById(R.id.imgVBackDSTV);
+        btnAdd = findViewById(R.id.btn_add);
         DStuvung = new ArrayList<>();
         listtu = new ArrayList<>();
         AddArrayTV();
@@ -83,49 +90,6 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
                 )
         );
         speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        adapter = new DSTuVungAdapterAdmin(DSTuVungActivityAdmin.this, R.layout.row_dstuvung, DStuvung, new IonClickItemVocab() {
-            @Override
-            public void onClickSpeaker(TuVung tuVung) {
-                tts = new TextToSpeech(DSTuVungActivityAdmin.this, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            Toast.makeText(DSTuVungActivityAdmin.this, tuVung.getDapan(), Toast.LENGTH_SHORT).show();
-                            textToSpeed(tuVung.getDapan());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onClickMic(TuVung tuVung) {
-                //speedToText(tuVung);
-                bottomSheetMic = new BottomSheetMic(DSTuVungActivityAdmin.this, new IonClickBtsMic() {
-                    @Override
-                    public void onClickBtsMic() {
-                        speechIntent.putExtra(
-                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                        );
-                        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
-                        speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-                        speechRecognizer.startListening(speechIntent);
-                        recognitionListener(tuVung);
-                    }
-                });
-                bottomSheetMic.show(getSupportFragmentManager(), "BottomSheetMic");
-                speechIntent.putExtra(
-                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                );
-                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
-                speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-                speechRecognizer.startListening(speechIntent);
-                recognitionListener(tuVung);
-            }
-        });
-        dstuvungs.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +106,44 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
                 ontap.putExtra("idbo", idbo);
                 ontap.putExtra("DStuvung", DStuvung);
                 startActivity(ontap);
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAddVocab = new DialogAddVocab(DSTuVungActivityAdmin.this, "Add Vocabulary", "Add", new IonClickDialogAddVocab() {
+                    @Override
+                    public void onClickDialogAddVocab(String vocab, String type, String imgPreviewLink, String translate) {
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlAddVocab, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                AddArrayTV();
+                                dialogAddVocab.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String, String> param = new HashMap<>();
+                                param.put("vocab", vocab);
+                                param.put("type", type);
+                                param.put("imgPreview", imgPreviewLink);
+                                param.put("translate", translate);
+                                param.put("idUnitCategory", String.valueOf(idbo));
+                                param.put("active", String.valueOf(0));
+                                return param;
+                            }
+                        };
+                        requestQueue1.add(stringRequest1);
+                    }
+                });
+                dialogAddVocab.show();
             }
         });
     }
@@ -214,22 +216,6 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
     }
 
     private void AddArrayTV() {
-        /*database = Database.initDatabase(DSTuVungActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM TuVung WHERE ID_Bo = ?", new String[]{String.valueOf(idbo)});
-        DStuvung.clear();
-
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            int idtu = cursor.getInt(0);
-            int idbo = cursor.getInt(1);
-            String dapan = cursor.getString(2);
-            String dichnghia = cursor.getString(3);
-            String loaitu = cursor.getString(4);
-            String audio = cursor.getString(5);
-            byte[] anh = cursor.getBlob(6);
-
-            DStuvung.add(new TuVung(idtu, idbo, dapan, dichnghia, loaitu, audio, anh));
-        }*/
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetVocab, new Response.Listener<String>() {
             @Override
@@ -253,6 +239,110 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
                         idUnitCategory = jsonObject.getInt("idUnitCategory");
                         DStuvung.add(new TuVung(id, idUnitCategory, vocab, translate, type, "", imgPreview));
                     }
+                    adapter = new DSTuVungAdapterAdmin(DSTuVungActivityAdmin.this, R.layout.row_dstuvung_admin, DStuvung, new IonClickItemVocab() {
+                        @Override
+                        public void onClickSpeaker(TuVung tuVung) {
+                            tts = new TextToSpeech(DSTuVungActivityAdmin.this, new TextToSpeech.OnInitListener() {
+                                @Override
+                                public void onInit(int status) {
+                                    if (status == TextToSpeech.SUCCESS) {
+                                        Toast.makeText(DSTuVungActivityAdmin.this, tuVung.getDapan(), Toast.LENGTH_SHORT).show();
+                                        textToSpeed(tuVung.getDapan());
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onClickMic(TuVung tuVung) {
+                            //speedToText(tuVung);
+                            bottomSheetMic = new BottomSheetMic(DSTuVungActivityAdmin.this, new IonClickBtsMic() {
+                                @Override
+                                public void onClickBtsMic() {
+                                    speechIntent.putExtra(
+                                            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                    );
+                                    speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
+                                    speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+                                    speechRecognizer.startListening(speechIntent);
+                                    recognitionListener(tuVung);
+                                }
+                            });
+                            bottomSheetMic.show(getSupportFragmentManager(), "BottomSheetMic");
+                            speechIntent.putExtra(
+                                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                            );
+                            speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en");
+                            speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+                            speechRecognizer.startListening(speechIntent);
+                            recognitionListener(tuVung);
+                        }
+
+                        @Override
+                        public void onClickEdit(TuVung tuVung) {
+                            dialogAddVocab = new DialogAddVocab(DSTuVungActivityAdmin.this, "Edit Vocab", "Edit", tuVung.getDapan(), tuVung.getLoaitu(), tuVung.getAnh(), tuVung.getDichnghia(), new IonClickDialogAddVocab() {
+                                @Override
+                                public void onClickDialogAddVocab(String vocab, String type, String imgPreviewLink, String translate) {
+                                    RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                                    StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlEditVocab, new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            AddArrayTV();
+                                            dialogAddVocab.dismiss();
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }) {
+                                        @Override
+                                        protected Map<String, String> getParams() throws AuthFailureError {
+                                            HashMap<String, String> param = new HashMap<>();
+                                            param.put("id", String.valueOf(tuVung.getIdtu()));
+                                            param.put("vocab", vocab);
+                                            param.put("type", type);
+                                            param.put("imgPreview", imgPreviewLink);
+                                            param.put("translate", translate);
+                                            param.put("idUnitCategory", String.valueOf(idbo));
+                                            param.put("active", String.valueOf(0));
+                                            return param;
+                                        }
+                                    };
+                                    requestQueue1.add(stringRequest1);
+                                }
+                            });
+                            dialogAddVocab.show();
+                        }
+
+                        @Override
+                        public void onClickDelete(TuVung tuVung) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlDeleteVocab, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArrayTV();
+                                    Toast.makeText(DSTuVungActivityAdmin.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(tuVung.getIdtu()));
+                                    param.put("active", String.valueOf(1));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    });
                     dstuvungs.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -273,28 +363,5 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-
-        /*DStuvung.clear();
-        switch (idbo){
-            case 1:
-                DStuvung.add(new TuVung(1,idbo,"president","Tổng thống","Danh từ","", R.drawable.president));
-                DStuvung.add(new TuVung(2,idbo,"customer","Khách hàng","Danh từ","", R.drawable.customer));
-                DStuvung.add(new TuVung(3,idbo,"purchase","Mua","Động từ","", R.drawable.purchase));
-                DStuvung.add(new TuVung(4,idbo,"item","Món hàng","Danh từ","", R.drawable.item));
-                DStuvung.add(new TuVung(5,idbo,"consultant","Tư vấn viên","Danh từ","", R.drawable.consultant));
-                break;
-            case 2:
-                DStuvung.add(new TuVung(1,idbo,"resign","Từ chức","Động từ","", R.drawable.resign));
-                DStuvung.add(new TuVung(2,idbo,"payroll","Lương","Danh từ","", R.drawable.payroll));
-                break;
-            case 3:
-                DStuvung.add(new TuVung(1,idbo,"advise","Khuyên bảo","Động từ","", R.drawable.advise));
-                DStuvung.add(new TuVung(2,idbo,"leadership","Lãnh đạo","Danh từ","", R.drawable.leadership));
-                break;
-            case 4:
-                DStuvung.add(new TuVung(1,idbo,"consider","Xem xét","Động từ","", R.drawable.consider));
-                DStuvung.add(new TuVung(2,idbo,"contract","Hợp đồng","Danh từ","", R.drawable.contract));
-                break;
-        }*/
     }
 }

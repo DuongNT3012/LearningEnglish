@@ -43,7 +43,7 @@ public class DSTuVungAdapterAdmin extends BaseAdapter {
     }
 
     private class ViewHolder {
-        ImageView imgHinh, imgSpeaker, imgMic;
+        ImageView imgHinh, imgSpeaker, imgMic, imgEdit, imgDelete;
         TextView twDichNghia;
         TextView twTuVung;
     }
@@ -58,6 +58,8 @@ public class DSTuVungAdapterAdmin extends BaseAdapter {
             convertView = inflater.inflate(layout, null);
             holder.imgHinh = (ImageView) convertView.findViewById(R.id.imgHinh);
             holder.imgSpeaker = (ImageView) convertView.findViewById(R.id.img_speaker);
+            holder.imgEdit = (ImageView) convertView.findViewById(R.id.img_edit);
+            holder.imgDelete = (ImageView) convertView.findViewById(R.id.img_delete);
             holder.imgMic = (ImageView) convertView.findViewById(R.id.img_mic);
             holder.twDichNghia = (TextView) convertView.findViewById(R.id.twDichNghia);
             holder.twTuVung = (TextView) convertView.findViewById(R.id.twTuVung);
@@ -90,6 +92,18 @@ public class DSTuVungAdapterAdmin extends BaseAdapter {
                 ionClickItemVocab.onClickMic(tuVung);
             }
         });
+        holder.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ionClickItemVocab.onClickEdit(tuVung);
+            }
+        });
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ionClickItemVocab.onClickDelete(tuVung);
+            }
+        });
         return convertView;
     }
 }
@@ -97,5 +111,7 @@ public class DSTuVungAdapterAdmin extends BaseAdapter {
 interface IonClickItemVocab {
     void onClickSpeaker(TuVung tuVung);
     void onClickMic(TuVung tuVung);
+    void onClickEdit(TuVung tuVung);
+    void onClickDelete(TuVung tuVung);
 }
 

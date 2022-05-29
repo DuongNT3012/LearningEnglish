@@ -62,7 +62,6 @@
         <activity android:name=".admin.dienkhuyet.FillBlanksActivityAdmin" />
         <activity android:name=".admin.dienkhuyet.DienKhuyetActivityAdmin" />
         <activity android:name=".admin.sapxepcau.FinishSXCActivityAdmin" />
-        <activity android:name=".admin.tracnghiem.FinishQuizActivityAdmin" />
         <activity android:name=".admin.tracnghiem.QuizActivityAdmin" />
         <activity android:name=".admin.tracnghiem.TracNghiemActivityAdmin" />
         <activity android:name=".admin.luyennghe.FinishQuizLSActivityAdmin" />

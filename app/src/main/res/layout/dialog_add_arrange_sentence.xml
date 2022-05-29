@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:background="@drawable/bg_dialog_white_border">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Add Arrange Sentence"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/edt_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/oval"
+        android:hint="Enter answer"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/edt_part1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/oval"
+        android:hint="Enter part1"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/edt_part2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/oval"
+        android:hint="Enter part2"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/edt_part3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/oval"
+        android:hint="Enter part3"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/edt_part4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/oval"
+        android:hint="Enter part4"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:text="Add" />
+    </LinearLayout>
+</LinearLayout>

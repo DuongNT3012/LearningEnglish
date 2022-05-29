@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_dstuvung"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:context=".user.hoctuvung.DSTuVungActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginLeft="13dp"
+            android:layout_toEndOf="@+id/imgVBackDSTV"
+            android:layout_toRightOf="@+id/imgVBackDSTV"
+            android:text="Từ Vựng"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgVBackDSTV"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+
+            android:src="@drawable/ic_back"
+            android:tint="@color/white"
+            tools:ignore="UseAppTint" />
+
+        <ImageView
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_person"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/lgvTuVung"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnOnTap"
+        android:layout_below="@id/rl_toolbar"
+        android:layout_weight="9"
+        android:numColumns="2" />
+
+    <Button
+        android:id="@+id/btnOnTap"
+        android:layout_width="280dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimary"
+        android:paddingBottom="10dp"
+        android:text="Ôn Tập"
+        android:textAllCaps="false"
+        android:textColor="@color/lightGrey"
+        android:textSize="20sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/orange"
+        android:src="@drawable/ic_add" />
+</RelativeLayout>

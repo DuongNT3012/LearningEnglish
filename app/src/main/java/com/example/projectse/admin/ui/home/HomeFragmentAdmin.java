@@ -47,6 +47,7 @@ public class HomeFragmentAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), HocTuVungActivityAdmin.class);
+                intent.putExtra("idSubjectCategory", 1);
                 startActivity(intent);
             }
         });
@@ -54,6 +55,7 @@ public class HomeFragmentAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DienKhuyetActivityAdmin.class);
+                intent.putExtra("idSubjectCategory", 5);
                 startActivity(intent);
             }
         });
@@ -61,6 +63,7 @@ public class HomeFragmentAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TracNghiemActivityAdmin.class);
+                intent.putExtra("idSubjectCategory", 2);
                 startActivity(intent);
             }
         });
@@ -68,6 +71,7 @@ public class HomeFragmentAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SapXepCauActivityAdmin.class);
+                intent.putExtra("idSubjectCategory", 3);
                 startActivity(intent);
             }
         });
@@ -75,6 +79,7 @@ public class HomeFragmentAdmin extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LuyenNgheActivityAdmin.class);
+                intent.putExtra("idSubjectCategory", 4);
                 startActivity(intent);
             }
         });

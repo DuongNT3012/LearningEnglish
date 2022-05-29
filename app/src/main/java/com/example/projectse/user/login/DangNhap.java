@@ -51,7 +51,8 @@ public class DangNhap extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dang_nhap);
-        binding.edtUsername.setText("NguyenThaiDuong");
+        //binding.edtUsername.setText("NguyenThaiDuong");
+        binding.edtUsername.setText("Admin");
         binding.edtPassword.setText("123456789");
         CatchOnButtonQuayLai();
         CatchOnButtonDangNhap();

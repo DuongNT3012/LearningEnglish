@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,7 +24,13 @@ import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
 import com.example.projectse.admin.bohoctap.BoHocTapAdmin;
 import com.example.projectse.admin.bohoctap.BoHocTapAdapterAdmin;
+import com.example.projectse.admin.bohoctap.IonClickItemUnit;
+import com.example.projectse.admin.dialog.DialogAddUnit;
+import com.example.projectse.admin.dialog.IonClickDialogAddUnit;
+import com.example.projectse.admin.hoctuvung.HocTuVungActivityAdmin;
+import com.example.projectse.admin.tracnghiem.TracNghiemActivityAdmin;
 import com.example.projectse.ultils.Server;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,13 +41,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LuyenNgheActivityAdmin extends AppCompatActivity {
-    ListView listView;
+    RecyclerView listView;
     ImageView imgback;
     ArrayList<BoHocTapAdmin> boCauHoiArrayList;
     BoHocTapAdapterAdmin boCauHoiAdapter;
     final String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     int idbocauhoi;
+    int idSubjectCategory = 0;
+    FloatingActionButton btnAdd;
+    DialogAddUnit dialogAddUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,37 +58,15 @@ public class LuyenNgheActivityAdmin extends AppCompatActivity {
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_luyen_nghe);
+        setContentView(R.layout.activity_luyen_nghe_admin);
+
+        idSubjectCategory = getIntent().getIntExtra("idSubjectCategory", 0);
+
         listView = findViewById(R.id.lvluyennghe);
         imgback = findViewById(R.id.imgVBackLN);
+        btnAdd = findViewById(R.id.btn_add);
         boCauHoiArrayList = new ArrayList<>();
         AddArrayBTN();
-        boCauHoiAdapter = new BoHocTapAdapterAdmin(LuyenNgheActivityAdmin.this, R.layout.row_bo, boCauHoiArrayList);
-        listView.setAdapter(boCauHoiAdapter);
-        boCauHoiAdapter.notifyDataSetChanged();
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
-                String a = null;
-                Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
-                for (int i = position; i < cursor.getCount(); i++) {
-                    cursor.moveToPosition(i);
-                    int idbo = cursor.getInt(0);
-                    int stt = cursor.getInt(1);
-                    String tenbo = cursor.getString(2);
-                    a = tenbo;
-                    idbocauhoi = idbo;
-                    break;
-                }*/
-                idbocauhoi = boCauHoiArrayList.get(position).getIdBo();
-                Intent quiz = new Intent(LuyenNgheActivityAdmin.this, ListeningActivityAdmin.class);
-                quiz.putExtra("Bo", idbocauhoi);
-                startActivity(quiz);
-            }
-        });
 
         imgback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,20 +74,45 @@ public class LuyenNgheActivityAdmin extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAddUnit = new DialogAddUnit(LuyenNgheActivityAdmin.this, new IonClickDialogAddUnit() {
+                    @Override
+                    public void onClickDialogAddUnit(String name, String imgPreviewLink) {
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlAddUnit, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                AddArrayBTN();
+                                dialogAddUnit.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String, String> param = new HashMap<>();
+                                param.put("name", name);
+                                param.put("imgPreview", imgPreviewLink);
+                                param.put("idSubjectCategory", String.valueOf(idSubjectCategory));
+                                param.put("active", String.valueOf(0));
+                                return param;
+                            }
+                        };
+                        requestQueue1.add(stringRequest1);
+                    }
+                });
+                dialogAddUnit.show();
+            }
+        });
     }
 
     private void AddArrayBTN() {
-        /*database = Database.initDatabase(LuyenNgheActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
-        boCauHoiArrayList.clear();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            int idbo = cursor.getInt(0);
-            int stt = cursor.getInt(1);
-            String tenbo = cursor.getString(2);
-            boCauHoiArrayList.add(new BoHocTap(idbo, stt, tenbo));
-
-        }*/
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
             @Override
@@ -118,8 +132,42 @@ public class LuyenNgheActivityAdmin extends AppCompatActivity {
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
                         boCauHoiArrayList.add(new BoHocTapAdmin(id, id, name));
                     }
-                    boCauHoiAdapter = new BoHocTapAdapterAdmin(LuyenNgheActivityAdmin.this, R.layout.row_bo, boCauHoiArrayList);
+                    boCauHoiAdapter = new BoHocTapAdapterAdmin(LuyenNgheActivityAdmin.this, R.layout.row_bo_admin, boCauHoiArrayList, new IonClickItemUnit() {
+                        @Override
+                        public void onClickItemUnit(int position) {
+                            idbocauhoi = boCauHoiArrayList.get(position).getIdBo();
+                            Intent quiz = new Intent(LuyenNgheActivityAdmin.this, ListeningActivityAdmin.class);
+                            quiz.putExtra("Bo", idbocauhoi);
+                            startActivity(quiz);
+                        }
+
+                        @Override
+                        public void onClickDelete(int idUnitCategory) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlDeleteUnit, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArrayBTN();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(idUnitCategory));
+                                    param.put("active", String.valueOf(1));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    });
                     listView.setAdapter(boCauHoiAdapter);
+                    listView.setLayoutManager(new LinearLayoutManager(LuyenNgheActivityAdmin.this, LinearLayoutManager.VERTICAL, false));
                     boCauHoiAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -139,10 +187,5 @@ public class LuyenNgheActivityAdmin extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-        /*boCauHoiArrayList.clear();
-        boCauHoiArrayList.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
-        boCauHoiArrayList.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
-        boCauHoiArrayList.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boCauHoiArrayList.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

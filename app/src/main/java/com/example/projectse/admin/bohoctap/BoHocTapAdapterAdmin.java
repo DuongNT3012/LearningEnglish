@@ -5,56 +5,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projectse.R;
 
 import java.util.List;
 
-public class BoHocTapAdapterAdmin extends BaseAdapter {
+public class BoHocTapAdapterAdmin extends RecyclerView.Adapter<BoHocTapAdapterAdmin.ViewHolder> {
     private Context context;
     private int layout;
     private List<BoHocTapAdmin> boHocTapAdminList;
+    private IonClickItemUnit ionClickItemUnit;
 
-    public BoHocTapAdapterAdmin(Context context, int layout, List<BoHocTapAdmin> boHocTapAdminList) {
+    public BoHocTapAdapterAdmin(Context context, int layout, List<BoHocTapAdmin> boHocTapAdminList, IonClickItemUnit ionClickItemUnit) {
         this.context = context;
         this.layout = layout;
         this.boHocTapAdminList = boHocTapAdminList;
+        this.ionClickItemUnit = ionClickItemUnit;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+        ViewHolder viewHolder = new ViewHolder(v);
+        return viewHolder;
     }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        BoHocTapAdmin BoHT = boHocTapAdminList.get(position);
+        holder.txtTenBo.setText(BoHT.getTenBo());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ionClickItemUnit.onClickItemUnit(position);
+            }
+        });
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ionClickItemUnit.onClickDelete(BoHT.getIdBo());
+                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
         return boHocTapAdminList.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    private class ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtTenBo;
-    }
+        ImageView imgDelete;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        BoHocTapAdapterAdmin.ViewHolder holder;
-        if(convertView == null){
-            holder = new BoHocTapAdapterAdmin.ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout,null);
-            holder.txtTenBo = (TextView) convertView.findViewById(R.id.tvTenBo);
-            convertView.setTag(holder);
-        }else {
-            holder = (BoHocTapAdapterAdmin.ViewHolder) convertView.getTag();
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtTenBo = itemView.findViewById(R.id.tvTenBo);
+            imgDelete = itemView.findViewById(R.id.img_delete);
         }
-        BoHocTapAdmin BoHT = boHocTapAdminList.get(position);
-        holder.txtTenBo.setText(BoHT.getTenBo());
-        return convertView;
     }
 }
+

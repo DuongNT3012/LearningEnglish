@@ -1,24 +1,16 @@
 package com.example.projectse.admin.sapxepcau;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,10 +20,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projectse.R;
-import com.example.projectse.user.taikhoan.DatabaseAccess;
-import com.example.projectse.user.taikhoan.User;
-import com.example.projectse.admin.ui.home.Database;
+import com.example.projectse.admin.dialog.DialogAddArrangeSentence;
+import com.example.projectse.admin.dialog.IonClickAddArrangeSentence;
+import com.example.projectse.admin.tracnghiem.QuizActivityAdmin;
+import com.example.projectse.admin.tracnghiem.QuizAdapterAdmin;
 import com.example.projectse.ultils.Server;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,28 +34,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class ArrangeSentencesActivityAdmin extends AppCompatActivity {
 
-    final String DATABASE_NAME = "HocNgonNgu.db";
-    SQLiteDatabase database;
-    DatabaseAccess DB;
-
-    private int presCounter = 0;
-    private String[] keys = {"part1", "part2", "part3", "part4"};
-    private String textAnswer = "SUNNYSKY";
-    private int maxPresCounter = 4;
-    Button btnquit;
-    TextView textScreen, textTitle;
-    TextView tvQuestionCount, tvScore;
     ArrayList<CauSapXep> cauSapXeps;
-    Animation smallbigforth;
     int idbo;
-    private int score = 0;
-    int dem;
-    int cau = 1;
-    User user;
+    RecyclerView recyclerView;
+    Toolbar toolbar;
+    FloatingActionButton btnAdd;
+    ArrangeAdapterAdmin arrangeAdapterAdmin;
+    DialogAddArrangeSentence dialogAddArrangeSentence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,71 +51,65 @@ public class ArrangeSentencesActivityAdmin extends AppCompatActivity {
         //hide status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_arrange_sentences);
-        DB = DatabaseAccess.getInstance(getApplicationContext());
-        AnhXa();
+        setContentView(R.layout.activity_arrange_sentences_admin);
+
+        recyclerView = findViewById(R.id.recycler_view);
+        toolbar = findViewById(R.id.toolbar);
+        btnAdd = findViewById(R.id.btn_add);
+
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         idbo = intent.getIntExtra("idbo", 0);
         cauSapXeps = new ArrayList<>();
         AddArraySXC();
-        LayUser();
 
-        btnquit.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent
-                        = new Intent(ArrangeSentencesActivityAdmin.this,
-                        SapXepCauActivityAdmin.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                dialogAddArrangeSentence = new DialogAddArrangeSentence(ArrangeSentencesActivityAdmin.this, new IonClickAddArrangeSentence() {
+                    @Override
+                    public void onClickAddArrangeSentence(String ans, String a, String b, String c, String d) {
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlAddArrangeSentence, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                AddArraySXC();
+                                dialogAddArrangeSentence.dismiss();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String, String> param = new HashMap<>();
+                                param.put("answer", ans);
+                                param.put("part1", a);
+                                param.put("part2", b);
+                                param.put("part3", c);
+                                param.put("part4", d);
+                                param.put("idUnitCategory", String.valueOf(idbo));
+                                return param;
+                            }
+                        };
+                        requestQueue1.add(stringRequest1);
+                    }
+                });
+                dialogAddArrangeSentence.show();
             }
         });
-
-    }
-
-    private void AnhXa() {
-        textScreen = (TextView) findViewById(R.id.textSXC);
-        textTitle = (TextView) findViewById(R.id.textOption);
-        tvQuestionCount = (TextView) findViewById(R.id.tvQuestionSXC);
-        tvScore = (TextView) findViewById(R.id.tvScoreSXC);
-        btnquit = (Button) findViewById(R.id.btnQuitSXC);
-    }
-
-    public void LayUser() {
-        try {
-            database = Database.initDatabase(ArrangeSentencesActivityAdmin.this, DATABASE_NAME);
-            Cursor cursor = database.rawQuery("SELECT * FROM User WHERE ID_User = ?", new String[]{String.valueOf(DB.iduser)});
-            cursor.moveToNext();
-            String Iduser = cursor.getString(0);
-            String HoTen = cursor.getString(1);
-            int Point = cursor.getInt(2);
-            String Email = cursor.getString(3);
-            String SDT = cursor.getString(4);
-            user = new User(Iduser, HoTen, Point, Email, SDT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void AddArraySXC() {
-        /*database = Database.initDatabase(ArrangeSentencesActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM SapXepCau WHERE IDBo = ?", new String[]{String.valueOf(idbo)});
-        cauSapXeps.clear();
-
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            int idcau = cursor.getInt(0);
-            int idbo = cursor.getInt(1);
-            String dapan = cursor.getString(2);
-            String part1 = cursor.getString(3);
-            String part2 = cursor.getString(4);
-            String part3 = cursor.getString(5);
-            String part4 = cursor.getString(6);
-
-            cauSapXeps.add(new CauSapXep(idcau, idbo, dapan, part1, part2, part3, part4));
-        }*/
-
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetArrangeSentence, new Response.Listener<String>() {
             @Override
@@ -159,39 +135,65 @@ public class ArrangeSentencesActivityAdmin extends AppCompatActivity {
                         idUnitCategory = jsonObject.getInt("idUnitCategory");
                         cauSapXeps.add(new CauSapXep(id, idUnitCategory, answer, a, b, c, d));
                     }
-                    try {
-                        textAnswer = cauSapXeps.get(0).getDapan();
+                    arrangeAdapterAdmin = new ArrangeAdapterAdmin(cauSapXeps, new IonClickItemArrange() {
+                        @Override
+                        public void onClickEdit(CauSapXep cauSapXep, String answer, String a, String b, String c, String d) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlEditArrangeSentence, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArraySXC();
+                                    Toast.makeText(ArrangeSentencesActivityAdmin.this, "Edited", Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
 
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(cauSapXep.getIdcau()));
+                                    param.put("answer", answer);
+                                    param.put("part1", a);
+                                    param.put("part2", b);
+                                    param.put("part3", c);
+                                    param.put("part4", d);
+                                    param.put("idUnitCategory", String.valueOf(idbo));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
 
-                        smallbigforth = AnimationUtils.loadAnimation(ArrangeSentencesActivityAdmin.this, R.anim.smallbigforth);
+                        @Override
+                        public void onClickDelete(CauSapXep cauSapXep) {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Server.urlDeleteArrangeSentence, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    AddArraySXC();
+                                    Toast.makeText(ArrangeSentencesActivityAdmin.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
 
-
-                        keys[0] = cauSapXeps.get(0).getPart1();
-                        keys[1] = cauSapXeps.get(0).getPart2();
-                        keys[2] = cauSapXeps.get(0).getPart3();
-                        keys[3] = cauSapXeps.get(0).getPart4();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    tvQuestionCount.setText("Question: " + cau + "/" + cauSapXeps.size());
-                    tvScore.setText("Score: " + score);
-
-
-                    keys = shuffleArray(keys);
-
-                    dem = 0;
-                    while (dem < keys.length) {
-                        if (dem < 1) {
-                            addView(((LinearLayout) findViewById(R.id.layoutPart1)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-                        } else if (dem < 2) {
-                            addView(((LinearLayout) findViewById(R.id.layoutPart2)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-                        } else if (dem < 3) {
-                            addView(((LinearLayout) findViewById(R.id.layoutPart3)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-                        } else
-                            addView(((LinearLayout) findViewById(R.id.layoutPart4)), keys[dem], ((EditText) findViewById(R.id.editDapAn)));
-                        dem++;
-                    }
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> param = new HashMap<>();
+                                    param.put("id", String.valueOf(cauSapXep.getIdcau()));
+                                    return param;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    });
+                    recyclerView.setLayoutManager(new LinearLayoutManager(ArrangeSentencesActivityAdmin.this, LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(arrangeAdapterAdmin);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -210,164 +212,5 @@ public class ArrangeSentencesActivityAdmin extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-
-        /*switch (idbo) {
-            case 1:
-                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
-                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
-                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
-                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
-                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
-                break;
-            case 2:
-                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
-                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
-                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
-                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
-                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
-                break;
-            case 3:
-                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
-                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
-                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
-                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
-                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
-                break;
-            case 4:
-                cauSapXeps.add(new CauSapXep(1, idbo, "They are required to inform the human resources department when resigning due to a disagreement over company policy.", "They are required to inform", "the human resources department", "when resigning due to", "a disagreement over company policy."));
-                cauSapXeps.add(new CauSapXep(2, idbo, "All the important files were organized first by color and then alphabetized by the title and name.", "All the important files", "were organized first", "by color and then alphabetized", "by the title and name."));
-                cauSapXeps.add(new CauSapXep(3, idbo, "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.", "Many companies interviewed", "plan to hire more personnel,", "while 20 percent expect", "to reduce their payrolls."));
-                cauSapXeps.add(new CauSapXep(4, idbo, "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.", "Employees", "who wish to enroll in", "the marketing seminar", "are urged to do so by this Friday."));
-                cauSapXeps.add(new CauSapXep(5, idbo, "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.", "The secretary", "in the 2nd flood office", "answers e-mails", "between 8 a.m. and noon."));
-                break;
-        }*/
-    }
-
-    private String[] shuffleArray(String[] ar) {
-        Random rnd = new Random();
-        for (int i = ar.length - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
-            String a = ar[index];
-            ar[index] = ar[i];
-            ar[i] = a;
-        }
-        return ar;
-    }
-
-    private void addView(LinearLayout viewParent, final String text, final EditText editText) {
-        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-
-        linearLayoutParams.rightMargin = 5;
-
-        final TextView textView = new TextView(this);
-
-        textView.setLayoutParams(linearLayoutParams);
-        textView.setBackground(this.getResources().getDrawable(R.drawable.bgbtn));
-        textView.setTextColor(this.getResources().getColor(R.color.colorPurple));
-        textView.setGravity(Gravity.CENTER);
-        textView.setText(text);
-        textView.setClickable(true);
-        textView.setFocusable(true);
-        textView.setTextSize(30);
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/FredokaOneRegular.ttf");
-
-        textScreen.setTypeface(typeface);
-        textTitle.setTypeface(typeface);
-        tvQuestionCount.setTypeface(typeface);
-        tvScore.setTypeface(typeface);
-        editText.setTypeface(typeface);
-        textView.setTypeface(typeface);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
-                if (presCounter < maxPresCounter) {
-                    if (presCounter == 0)
-                        editText.setText("");
-
-                    int chuoi = 0;
-
-                    if (editText.getText().toString().equals("") || chuoi == 3) {
-                        editText.setText(editText.getText().toString() + text);
-                        chuoi++;
-                    } else {
-                        editText.setText(editText.getText().toString() + " " + text);
-                        chuoi++;
-                    }
-
-                    textView.startAnimation(smallbigforth);
-                    textView.animate().alpha(0).setDuration(300);
-                    presCounter++;
-                    textView.setClickable(false);
-
-                    if (presCounter == maxPresCounter)
-                        doValidate();
-                }
-            }
-        });
-        viewParent.addView(textView);
-    }
-
-
-    private void doValidate() {
-        presCounter = 0;
-
-        EditText editText = findViewById(R.id.editDapAn);
-        LinearLayout Part1 = findViewById(R.id.layoutPart1);
-        LinearLayout Part2 = findViewById(R.id.layoutPart2);
-        LinearLayout Part3 = findViewById(R.id.layoutPart3);
-        LinearLayout Part4 = findViewById(R.id.layoutPart4);
-
-        if (editText.getText().toString().equals(textAnswer)) {
-            if (cau == cauSapXeps.size()) {
-                score += 5;
-                //DB.capnhatdiem(DB.iduser, user.getPoint(), score);
-                Toast.makeText(ArrangeSentencesActivityAdmin.this, "Hoàn Thành Xuất Sắc!!~(^.^)~", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ArrangeSentencesActivityAdmin.this, FinishSXCActivityAdmin.class);
-                intent.putExtra("score", score);
-                intent.putExtra("questiontrue", cau);
-                intent.putExtra("qcount", cauSapXeps.size());
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(ArrangeSentencesActivityAdmin.this, "Chính xác!!(^.^)", Toast.LENGTH_SHORT).show();
-                textAnswer = cauSapXeps.get(cau).getDapan();
-                keys[0] = cauSapXeps.get(cau).getPart1();
-                keys[1] = cauSapXeps.get(cau).getPart2();
-                keys[2] = cauSapXeps.get(cau).getPart3();
-                keys[3] = cauSapXeps.get(cau).getPart4();
-                editText.setText("");
-                score += 5;
-                cau++;
-                tvQuestionCount.setText("Question: " + cau + "/" + cauSapXeps.size());
-                tvScore.setText("Score: " + score);
-            }
-
-        } else {
-            Toast.makeText(ArrangeSentencesActivityAdmin.this, "Sai rồi!!(T.T)", Toast.LENGTH_SHORT).show();
-            editText.setText("");
-        }
-
-        keys = shuffleArray(keys);
-        Part1.removeAllViews();
-        Part2.removeAllViews();
-        Part3.removeAllViews();
-        Part4.removeAllViews();
-
-        dem = 0;
-        while (dem < keys.length) {
-            if (dem < 1) {
-                addView(Part1, keys[dem], editText);
-            } else if (dem < 2) {
-                addView(Part2, keys[dem], editText);
-            } else if (dem < 3) {
-                addView(Part3, keys[dem], editText);
-            } else addView(Part4, keys[dem], editText);
-            dem++;
-        }
     }
 }
