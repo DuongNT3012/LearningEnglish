@@ -24,4 +24,7 @@ public class Server {
     public static String urlAddListening = "http://" + localhost + "/addListening.php";
     public static String urlDeleteListening = "http://" + localhost + "/deleteListening.php";
     public static String urlEditListening = "http://" + localhost + "/editListening.php";
+    public static String urlAddFillBlank = "http://" + localhost + "/addFillBlank.php";
+    public static String urlDeleteFillBlank = "http://" + localhost + "/deleteFillBlank.php";
+    public static String urlEditFillBlank = "http://" + localhost + "/editFillBlank.php";
 }
