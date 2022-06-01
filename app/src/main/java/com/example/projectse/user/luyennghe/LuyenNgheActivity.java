@@ -116,7 +116,7 @@ public class LuyenNgheActivity extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boCauHoiArrayList.add(new BoHocTap(id, id, name));
+                        boCauHoiArrayList.add(new BoHocTap(id, id, name, imgPreview));
                     }
                     boCauHoiAdapter = new BoHocTapAdapter(LuyenNgheActivity.this, R.layout.row_bo, boCauHoiArrayList);
                     listView.setAdapter(boCauHoiAdapter);

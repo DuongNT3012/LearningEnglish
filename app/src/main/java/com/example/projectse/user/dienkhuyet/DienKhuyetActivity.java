@@ -113,7 +113,7 @@ public class DienKhuyetActivity extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boHocTapArrayList.add(new BoHocTap(id, id, name));
+                        boHocTapArrayList.add(new BoHocTap(id, id, name, imgPreview));
                     }
                     boHocTapAdapter =new BoHocTapAdapter(DienKhuyetActivity.this,R.layout.row_bo, boHocTapArrayList);
                     listView.setAdapter(boHocTapAdapter);

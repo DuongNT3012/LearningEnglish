@@ -129,7 +129,7 @@ public class DienKhuyetActivityAdmin extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boHocTapAdminArrayList.add(new BoHocTapAdmin(id, id, name));
+                        boHocTapAdminArrayList.add(new BoHocTapAdmin(id, id, name, imgPreview));
                     }
                     boHocTapAdapterAdmin =new BoHocTapAdapterAdmin(DienKhuyetActivityAdmin.this, R.layout.row_bo_admin, boHocTapAdminArrayList, new IonClickItemUnit() {
                         @Override

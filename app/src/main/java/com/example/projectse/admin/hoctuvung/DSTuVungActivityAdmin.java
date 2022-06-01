@@ -1,9 +1,11 @@
 package com.example.projectse.admin.hoctuvung;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -42,6 +44,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class DSTuVungActivityAdmin extends AppCompatActivity {
@@ -146,6 +149,21 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
                 dialogAddVocab.show();
             }
         });
+
+        /*try {
+            Intent intent1 = new Intent();
+            intent1.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+            startActivityForResult(intent1, 0);
+        } catch (ActivityNotFoundException exception) {
+            Uri uri = Uri.parse("market://details?id=" + "com.google.android.tts&hl=en");
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.google.android.tts&hl=en")));
+            }
+        }*/
     }
 
     private void recognitionListener(TuVung tuVung) {
@@ -246,6 +264,7 @@ public class DSTuVungActivityAdmin extends AppCompatActivity {
                                 @Override
                                 public void onInit(int status) {
                                     if (status == TextToSpeech.SUCCESS) {
+                                        tts.setLanguage(Locale.ENGLISH);
                                         Toast.makeText(DSTuVungActivityAdmin.this, tuVung.getDapan(), Toast.LENGTH_SHORT).show();
                                         textToSpeed(tuVung.getDapan());
                                     }

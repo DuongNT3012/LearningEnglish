@@ -129,7 +129,7 @@ public class HocTuVungActivityAdmin extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boTuVungs.add(new BoHocTapAdmin(id, id, name));
+                        boTuVungs.add(new BoHocTapAdmin(id, id, name, imgPreview));
                     }
                     adapter = new BoHocTapAdapterAdmin(HocTuVungActivityAdmin.this, R.layout.row_bo_admin, boTuVungs, new IonClickItemUnit() {
                         @Override

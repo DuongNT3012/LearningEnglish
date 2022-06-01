@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class DSTuVungActivity extends AppCompatActivity {
@@ -90,6 +91,7 @@ public class DSTuVungActivity extends AppCompatActivity {
                     @Override
                     public void onInit(int status) {
                         if (status == TextToSpeech.SUCCESS) {
+                            tts.setLanguage(Locale.ENGLISH);
                             Toast.makeText(DSTuVungActivity.this, tuVung.getDapan(), Toast.LENGTH_SHORT).show();
                             textToSpeed(tuVung.getDapan());
                         }

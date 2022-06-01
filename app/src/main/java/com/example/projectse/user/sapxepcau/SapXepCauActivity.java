@@ -104,7 +104,7 @@ public class SapXepCauActivity extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boTuVungs.add(new BoHocTap(id, id, name));
+                        boTuVungs.add(new BoHocTap(id, id, name, imgPreview));
                     }
                     adapter = new BoHocTapAdapter(SapXepCauActivity.this,R.layout.row_sapxepcau,boTuVungs);
                     botuvungs.setAdapter(adapter);

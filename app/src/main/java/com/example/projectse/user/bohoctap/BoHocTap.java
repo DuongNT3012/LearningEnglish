@@ -7,12 +7,21 @@ public class BoHocTap implements Serializable {
     private int idBo;
     private int stt;
     private String TenBo;
+    private String imgPreview;
 
-
-    public BoHocTap(int idBo, int stt, String tenBo) {
+    public BoHocTap(int idBo, int stt, String tenBo, String imgPreview) {
         this.idBo = idBo;
         this.stt = stt;
         TenBo = tenBo;
+        this.imgPreview = imgPreview;
+    }
+
+    public String getImgPreview() {
+        return imgPreview;
+    }
+
+    public void setImgPreview(String imgPreview) {
+        this.imgPreview = imgPreview;
     }
 
     public int getIdBo() {

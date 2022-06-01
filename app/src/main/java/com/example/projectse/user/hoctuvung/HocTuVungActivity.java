@@ -104,7 +104,7 @@ public class HocTuVungActivity extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         imgPreview = jsonObject.getString("imgPreview");
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
-                        boTuVungs.add(new BoHocTap(id, id, name));
+                        boTuVungs.add(new BoHocTap(id, id, name, imgPreview));
                     }
                     adapter = new BoHocTapAdapter(HocTuVungActivity.this, R.layout.row_bo, boTuVungs);
                     botuvungs.setAdapter(adapter);
