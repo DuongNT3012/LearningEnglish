@@ -76,17 +76,6 @@ public class HocTuVungActivity extends AppCompatActivity {
     }
 
     private void AddArrayBTV() {
-        /*database = Database.initDatabase(HocTuVungActivity.this, DATABASE_NAME);
-        Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi", null);
-        boTuVungs.clear();
-
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            int idbo = cursor.getInt(0);
-            int stt = cursor.getInt(1);
-            String tenbo = cursor.getString(2);
-            boTuVungs.add(new BoHocTap(idbo, stt, tenbo));
-        }*/
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlGetUnitCategory, new Response.Listener<String>() {
             @Override
@@ -127,10 +116,5 @@ public class HocTuVungActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-        /*boTuVungs.clear();
-        boTuVungs.add(new BoHocTap(1, 1, "Bộ học tập số 1"));
-        boTuVungs.add(new BoHocTap(2, 2, "Bộ học tập số 2"));
-        boTuVungs.add(new BoHocTap(3, 3, "Bộ học tập số 3"));
-        boTuVungs.add(new BoHocTap(4, 4, "Bộ học tập số 4"));*/
     }
 }

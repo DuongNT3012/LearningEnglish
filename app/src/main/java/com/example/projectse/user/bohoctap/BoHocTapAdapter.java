@@ -52,7 +52,7 @@ public class BoHocTapAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout,null);
             holder.txtTenBo = (TextView) convertView.findViewById(R.id.tvTenBo);
-            holder.imageView4 = convertView.findViewById(R.id.imageView4);
+            holder.imageView4 = (ImageView) convertView.findViewById(R.id.imageView4);
             convertView.setTag(holder);
         }else {
             holder = (BoHocTapAdapter.ViewHolder) convertView.getTag();

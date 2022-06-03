@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class SapXepCauActivity extends AppCompatActivity {
 
-    final  String DATABASE_NAME = "HocNgonNgu.db";
+    final String DATABASE_NAME = "HocNgonNgu.db";
     SQLiteDatabase database;
     ImageView imgback;
 
@@ -75,7 +75,8 @@ public class SapXepCauActivity extends AppCompatActivity {
             }
         });
     }
-    private void AddArrayBTV(){
+
+    private void AddArrayBTV() {
         /*database = Database.initDatabase(SapXepCauActivity.this, DATABASE_NAME);
         Cursor cursor = database.rawQuery("SELECT * FROM BoCauHoi",null);
         boTuVungs.clear();
@@ -106,7 +107,7 @@ public class SapXepCauActivity extends AppCompatActivity {
                         idSubjectCategory = jsonObject.getInt("idSubjectCategory");
                         boTuVungs.add(new BoHocTap(id, id, name, imgPreview));
                     }
-                    adapter = new BoHocTapAdapter(SapXepCauActivity.this,R.layout.row_sapxepcau,boTuVungs);
+                    adapter = new BoHocTapAdapter(SapXepCauActivity.this, R.layout.row_bo, boTuVungs);
                     botuvungs.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
